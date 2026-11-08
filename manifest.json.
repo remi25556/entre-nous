@@ -1,8 +1,9 @@
 
 {
+  "id": "/entre-nous/",
   "name": "Entre Nous",
   "short_name": "Entre Nous",
-  "description": "Notre petit espace à deux",
+  "description": "Notre petit rendez-vous quotidien.",
   "start_url": "/entre-nous/",
   "scope": "/entre-nous/",
   "display": "standalone",
@@ -12,13 +13,15 @@
   "icons": [
     {
       "src": "./icone entre nous 192.png",
-      "sizes": "192x192",
-      "type": "image/png"
+      "sizes": "1254x1254",
+      "type": "image/png",
+      "purpose": "any"
     },
     {
       "src": "./icone entre nous 512.png",
-      "sizes": "512x512",
-      "type": "image/png"
+      "sizes": "1254x1254",
+      "type": "image/png",
+      "purpose": "any"
     }
   ]
 }
