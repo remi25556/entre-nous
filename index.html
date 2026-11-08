@@ -3,119 +3,301 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#171321">
 <title>Entre Nous ♡</title>
 <style>
 *{box-sizing:border-box}
-body{
- margin:0;
- min-height:100vh;
- background:linear-gradient(160deg,#171321,#30213c);
- color:#fff;
- font-family:Arial,sans-serif;
- padding:25px 18px;
-}
+body{margin:0;padding:22px 16px;background:linear-gradient(150deg,#171321,#382442);color:white;font-family:Arial,sans-serif;min-height:100vh}
 main{max-width:480px;margin:auto}
-header{text-align:center;margin:30px 0}
-h1{font-size:36px;margin-bottom:8px}
-header p{color:#c9b9d5}
-.card{
- background:#292238;
- border:1px solid #51415f;
- border-radius:20px;
- padding:22px;
- margin:18px 0;
-}
-.streak{font-size:38px;text-align:center;font-weight:bold}
-.center{text-align:center}
-.small{color:#c5b8d0;font-size:14px}
-input,textarea{
- width:100%;
- padding:14px;
- border-radius:12px;
- border:1px solid #655477;
- background:#191524;
- color:white;
- font-size:16px;
- margin:10px 0;
-}
-textarea{min-height:110px;resize:vertical}
-button{
- width:100%;
- border:0;
- border-radius:12px;
- padding:15px;
- margin-top:10px;
- background:#d69acb;
- color:#24172b;
- font-weight:bold;
- font-size:16px;
-}
-button:active{opacity:.8}
+header{text-align:center;padding:20px 0}
+h1{font-size:36px;margin:8px}
+header p,.muted{color:#cbbbd5}
+.card{background:#292238;border:1px solid #51415f;border-radius:19px;padding:20px;margin:16px 0}
+input,textarea{width:100%;padding:14px;margin:8px 0;border:1px solid #665477;border-radius:11px;background:#191524;color:white;font-size:16px}
+textarea{min-height:95px;resize:vertical}
+button{width:100%;padding:14px;margin:7px 0;border:0;border-radius:11px;background:#d69acb;color:#24172b;font-size:16px;font-weight:bold}
+button.secondary{background:#51415f;color:white}
 button:disabled{opacity:.4}
-.notice{
- background:#382d43;
- padding:14px;
- border-radius:12px;
- color:#dfcfe5;
- font-size:13px;
- line-height:1.5;
-}
+.small{font-size:13px;color:#cbbbd5;line-height:1.5}
+.hidden{display:none}
+.code{font-size:28px;letter-spacing:5px;text-align:center;font-weight:bold;color:#f3bde7}
+.question{background:#382d43;padding:14px;border-radius:12px;line-height:1.5;overflow-wrap:anywhere}
+.status{text-align:center;color:#e8c9e5;font-size:14px}
 </style>
 </head>
 <body>
 <main>
 <header>
 <h1>Entre Nous ♡</h1>
-<p>Un petit rendez-vous quotidien, juste nous deux.</p>
+<p>Notre petit rendez-vous quotidien.</p>
 </header>
 
-<section class="card center">
-<div class="streak">🔥 0</div>
-<strong>Notre série</strong>
-<p class="small">Nos journées partagées commencent ici.</p>
+<section class="card" id="auth">
+<h2>Bienvenue 💗</h2>
+<p class="small">Connecte-toi ou crée ton compte.</p>
+<input id="email" type="email" placeholder="Ton adresse e-mail">
+<input id="password" type="password" placeholder="Mot de passe (6 caractères minimum)">
+<button id="signup">Créer mon compte</button>
+<button class="secondary" id="login">Me connecter</button>
+<p class="status" id="authStatus"></p>
 </section>
 
-<section class="card">
-<h2>💌 La question du jour</h2>
-<p class="small">Une question chacun, chaque jour.</p>
-<label>Ta question pour l'autre :</label>
-<textarea id="question" placeholder="Aujourd'hui, j'aimerais te demander..."></textarea>
-<button onclick="saveQuestion()">Enregistrer ma question</button>
-<p id="questionStatus" class="small"></p>
+<section class="card hidden" id="pair">
+<h2>💞 Notre espace à deux</h2>
+<p class="small">Crée votre espace ou rejoins celui de ton partenaire.</p>
+<button id="createCouple">Créer notre espace</button>
+<p class="center">— OU —</p>
+<input id="joinCode" placeholder="Code de votre couple" maxlength="8">
+<button class="secondary" id="joinCouple">Rejoindre avec un code</button>
+<p class="status" id="pairStatus"></p>
 </section>
 
-<section class="card">
-<h2>💗 Ta réponse</h2>
-<textarea id="answer" placeholder="Écris ta réponse ici..."></textarea>
-<button onclick="saveAnswer()">Envoyer ma réponse</button>
-<p id="answerStatus" class="small"></p>
+<section class="card hidden" id="room">
+<h2>💌 Notre espace</h2>
+<p class="small">Votre code de couple à partager avec ton partenaire :</p>
+<div class="code" id="coupleCode"></div>
+<button class="secondary" id="copyCode">Copier le code</button>
+<p class="small">Gardez ce code privé. Ne le publiez pas.</p>
+<hr>
+<h2>🔥 Notre série</h2>
+<p class="small">Le compteur de jours consécutifs sera ajouté dans une prochaine étape.</p>
 </section>
 
-<section class="card">
-<h2>🔐 Notre petit espace</h2>
-<p class="notice">
-Cette version est une maquette locale : les réponses ne sont pas synchronisées entre vos téléphones. N'écrivez pas de secrets ou d'informations personnelles ici. La connexion privée à deux sera ajoutée dans une prochaine étape.
-</p>
+<section class="card hidden" id="daily">
+<h2>🌷 La question du jour</h2>
+<p class="small">Chacun écrit une question pour l'autre.</p>
+<h3>Ta question</h3>
+<textarea id="myQuestion" maxlength="500" placeholder="Ce que j'aimerais te demander aujourd'hui..."></textarea>
+<button id="sendQuestion">Envoyer ma question</button>
+<p class="status" id="myQuestionStatus"></p>
+<hr>
+<h3>La question de l'autre</h3>
+<div class="question" id="partnerQuestion">En attente de sa question...</div>
+<textarea id="myAnswer" maxlength="1000" placeholder="Ta réponse..."></textarea>
+<button id="sendAnswer">Envoyer ma réponse</button>
+<p class="status" id="myAnswerStatus"></p>
+<hr>
+<h3>💗 Vos réponses</h3>
+<p class="small" id="revealStatus">Elles seront révélées quand vous aurez répondu tous les deux.</p>
+<div id="revealed" class="hidden">
+<p><strong>Ta réponse :</strong></p>
+<div class="question" id="answerOne"></div>
+<p><strong>Sa réponse :</strong></p>
+<div class="question" id="answerTwo"></div>
+</div>
 </section>
 
-<footer class="center small">
-Fait avec amour ♡
-</footer>
+<section class="card hidden" id="account">
+<p class="small" id="accountEmail"></p>
+<button class="secondary" id="logout">Se déconnecter</button>
+</section>
+
+<p class="small status">Entre Nous ♡ — notre petit monde à deux.</p>
 </main>
 
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+
 <script>
-function saveQuestion(){
- const q=document.getElementById("question").value.trim();
- if(!q){alert("Écris d'abord une question !");return;}
- document.getElementById("questionStatus").textContent="Question enregistrée sur cet écran ♡";
+const firebaseConfig = {
+ apiKey: "AIzaSyCSZUqj2DDi-ESKwPdXsFiTgLUirr_97-k",
+ authDomain: "entre-nous-cde15.firebaseapp.com",
+ projectId: "entre-nous-cde15",
+ storageBucket: "entre-nous-cde15.firebasestorage.app",
+ messagingSenderId: "533203517782",
+ appId: "1:533203517782:web:eeadfd94441b06266296f7",
+ measurementId: "G-Y1G5EQXPDP"
+};
+
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+let user = null;
+let couple = null;
+let dayData = {};
+let dayListener = null;
+
+const $ = id => document.getElementById(id);
+const show = (id,on) => $(id).classList.toggle("hidden",!on);
+const message = (id,value) => $(id).textContent = value;
+
+function today(){
+ return new Intl.DateTimeFormat("en-CA",{
+  timeZone:"Europe/Paris",year:"numeric",month:"2-digit",day:"2-digit"
+ }).format(new Date());
 }
-function saveAnswer(){
- const a=document.getElementById("answer").value.trim();
- if(!a){alert("Écris d'abord une réponse !");return;}
- document.getElementById("answerStatus").textContent="Réponse enregistrée sur cet écran ♡";
+function escapeHTML(s){
+ return String(s||"").replace(/[&<>"']/g,c=>({
+  "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+ }[c]));
 }
+function makeCode(){
+ const chars="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+ const bytes=new Uint32Array(8);
+ crypto.getRandomValues(bytes);
+ return Array.from(bytes,b=>chars[b%chars.length]).join("");
+}
+
+$("signup").onclick=async()=>{
+ try{
+  await auth.createUserWithEmailAndPassword($("email").value.trim(),$("password").value);
+ }catch(e){message("authStatus",e.message);}
+};
+$("login").onclick=async()=>{
+ try{
+  await auth.signInWithEmailAndPassword($("email").value.trim(),$("password").value);
+ }catch(e){message("authStatus",e.message);}
+};
+$("logout").onclick=()=>auth.signOut();
+
+async function createCouple(){
+ const code=makeCode();
+ await db.collection("couples").doc(code).set({
+  members:[user.uid],createdAt:firebase.firestore.FieldValue.serverTimestamp()
+ });
+ localStorage.setItem("entreNousCode",code);
+ await openCouple(code);
+}
+$("createCouple").onclick=async()=>{
+ try{message("pairStatus","Création de votre espace...");
+ await createCouple();}
+ catch(e){message("pairStatus","Erreur : "+e.message);}
+};
+
+async function joinCouple(){
+ const code=$("joinCode").value.trim().toUpperCase();
+ if(!/^[A-HJ-NP-Z2-9]{8}$/.test(code)){
+  message("pairStatus","Le code doit contenir 8 caractères.");
+  return;
+ }
+ try{
+  const ref=db.collection("couples").doc(code);
+  await db.runTransaction(async tx=>{
+   const snap=await tx.get(ref);
+   if(!snap.exists)throw new Error("Code introuvable.");
+   const members=snap.data().members||[];
+   if(members.includes(user.uid))return;
+   if(members.length>=2)throw new Error("Cet espace a déjà deux membres.");
+   tx.update(ref,{members:[...members,user.uid]});
+  });
+  localStorage.setItem("entreNousCode",code);
+  await openCouple(code);
+ }catch(e){message("pairStatus",e.message);}
+}
+$("joinCouple").onclick=joinCouple;
+
+async function openCouple(code){
+ const ref=db.collection("couples").doc(code);
+ const snap=await ref.get();
+ if(!snap.exists || !(snap.data().members||[]).includes(user.uid)){
+  localStorage.removeItem("entreNousCode");
+  show("pair",true);show("room",false);show("daily",false);
+  return;
+ }
+ couple={code,...snap.data()};
+ const index=couple.members.indexOf(user.uid);
+ if(index<0)return;
+ show("pair",false);show("room",true);show("daily",true);
+ $("coupleCode").textContent=code;
+ $("accountEmail").textContent="Connecté : "+user.email;
+ show("account",true);
+ listenDay();
+}
+
+$("copyCode").onclick=async()=>{
+ try{
+  await navigator.clipboard.writeText(couple.code);
+  alert("Code copié !");
+ }catch(e){alert("Votre code : "+couple.code);}
+};
+
+function listenDay(){
+ if(dayListener)dayListener();
+ const ref=db.collection("couples").doc(couple.code)
+  .collection("days").doc(today());
+ dayListener=ref.onSnapshot(snap=>{
+  dayData=snap.exists?snap.data():{};
+  renderDay();
+ },e=>message("myQuestionStatus","Erreur de lecture : "+e.message));
+}
+
+function renderDay(){
+ const i=couple.members.indexOf(user.uid);
+ const mine=i===0?"1":"2";
+ const other=i===0?"2":"1";
+ const qMine=dayData["q"+mine]||"";
+ const qOther=dayData["q"+other]||"";
+ const aMine=dayData["a"+mine]||"";
+ const aOther=dayData["a"+other]||"";
+
+ $("myQuestion").value=qMine;
+ $("myQuestion").disabled=!!qMine;
+ $("sendQuestion").disabled=!!qMine;
+ message("myQuestionStatus",qMine?"Ta question est envoyée ♡":"Tu n'as pas encore envoyé ta question aujourd'hui.");
+
+ message("partnerQuestion",qOther||"En attente de sa question...");
+ $("myAnswer").disabled=!qOther||!!aMine;
+ $("myAnswer").value=aMine;
+ $("sendAnswer").disabled=!qOther||!!aMine;
+ message("myAnswerStatus",aMine?"Ta réponse est envoyée ♡":qOther?"À toi de répondre !":"La question de l'autre n'est pas encore arrivée.");
+
+ if(aMine&&aOther){
+  show("revealed",true);
+  message("revealStatus","Vous avez tous les deux répondu ! Voici vos réponses. 💗");
+  message("answerOne",aMine);
+  message("answerTwo",aOther);
+ }else{
+  show("revealed",false);
+  message("revealStatus","Les réponses seront révélées quand vous aurez répondu tous les deux.");
+ }
+}
+
+async function saveField(field,value){
+ const ref=db.collection("couples").doc(couple.code)
+  .collection("days").doc(today());
+ const snap=await ref.get();
+ if(snap.exists)await ref.update({[field]:value});
+ else await ref.set({[field]:value});
+}
+
+$("sendQuestion").onclick=async()=>{
+ const value=$("myQuestion").value.trim();
+ if(!value)return alert("Écris une question avant de l'envoyer.");
+ const i=couple.members.indexOf(user.uid);
+ const field=i===0?"q1":"q2";
+ try{await saveField(field,value);}
+ catch(e){alert("Impossible d'envoyer : "+e.message);}
+};
+
+$("sendAnswer").onclick=async()=>{
+ const value=$("myAnswer").value.trim();
+ if(!value)return alert("Écris une réponse avant de l'envoyer.");
+ const i=couple.members.indexOf(user.uid);
+ const field=i===0?"a1":"a2";
+ try{await saveField(field,value);}
+ catch(e){alert("Impossible d'envoyer : "+e.message);}
+};
+
+auth.onAuthStateChanged(async current=>{
+ user=current;
+ show("auth",!user);
+ show("account",!!user);
+ show("pair",!!user);
+ if(!user){
+  show("room",false);show("daily",false);
+  if(dayListener){dayListener();dayListener=null;}
+  couple=null;return;
+ }
+ $("accountEmail").textContent="Connecté : "+user.email;
+ const saved=localStorage.getItem("entreNousCode");
+ if(saved){
+  try{await openCouple(saved);}
+  catch(e){message("pairStatus",e.message);}
+ }
+});
 </script>
 </body>
 </html>
