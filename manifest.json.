@@ -1,0 +1,11 @@
+{
+  "name": "Entre Nous",
+  "short_name": "Entre Nous",
+  "description": "Notre petit espace à deux",
+  "start_url": "/entre-nous/",
+  "scope": "/entre-nous/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#101018",
+  "theme_color": "#171321"
+}
