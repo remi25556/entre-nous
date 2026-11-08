@@ -1,0 +1,207 @@
+import os, json, zipfile, textwrap
+
+root = "/mnt/data/entre_nous"
+os.makedirs(root, exist_ok=True)
+files = {}
+
+files["package.json"] = {
+  "name":"entre-nous-couple-app","private":True,"version":"1.0.0","type":"module",
+  "scripts":{"dev":"vite","build":"vite build","preview":"vite preview"},
+  "dependencies":{"firebase":"^11.0.0","vite":"^6.0.0"},
+  "devDependencies":{}
+}
+files["index.html"] = """<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f7e8ee">
+  <meta name="description" content="Votre rituel quotidien à deux.">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" href="/icon.svg" type="image/svg+xml">
+  <title>Entre Nous ♡</title>
+</head>
+<body>
+  <div id="app"><p class="loading">Entre Nous ♡</p></div>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>"""
+files["manifest.webmanifest"] = {
+  "name":"Entre Nous","short_name":"Entre Nous","start_url":"/","display":"standalone",
+  "background_color":"#fff9fb","theme_color":"#f7e8ee",
+  "icons":[{"src":"/icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]
+}
+files["icon.svg"] = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#f7e8ee"/><path d="M256 405S82 302 82 184c0-75 95-111 174-30 79-81 174-45 174 30 0 118-174 221-174 221z" fill="#d96c91"/><path d="M160 213c15-36 43-49 75-42" fill="none" stroke="#fff" stroke-width="13" stroke-linecap="round"/></svg>"""
+files["src"] = {}
+files["src/main.js"] = r"""import { initializeApp } from "firebase/app";
+import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { getFirestore, doc, getDoc, setDoc, updateDoc, onSnapshot, serverTimestamp, runTransaction, collection, query, orderBy, limit, getDocs } from "firebase/firestore";
+import "./style.css";
+
+// 1) Remplace les valeurs par celles de ton projet Firebase (voir README).
+const firebaseConfig = {
+  apiKey: "REMPLACER",
+  authDomain: "REMPLACER",
+  projectId: "REMPLACER",
+  appId: "REMPLACER"
+};
+const configured = firebaseConfig.apiKey !== "REMPLACER";
+let auth, db, currentUser, profile, stopDayListener;
+const $ = (s) => document.querySelector(s);
+const esc = (s="") => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const today = () => new Intl.DateTimeFormat("en-CA",{timeZone:"Europe/Paris",year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date());
+
+function shell(content) { $("#app").innerHTML = `<main class="wrap">${content}</main>`; }
+function authScreen() {
+  shell(`<header class="brand"><div class="heart">♡</div><h1>Entre Nous</h1><p>Votre petit rituel quotidien</p></header>
+  <section class="panel"><h2>Bienvenue ❤️</h2><p class="muted">Connectez-vous ou créez votre compte. Rémi et Emma auront chacun leur compte.</p>
+  <form id="authForm"><label>Adresse e-mail<input name="email" type="email" required autocomplete="email"></label>
+  <label>Mot de passe<input name="password" type="password" minlength="6" required autocomplete="current-password"></label>
+  <button class="primary" type="submit">Se connecter</button><button class="secondary" type="button" id="signup">Créer mon compte</button></form><p id="authError" class="error"></p></section>
+  <p class="foot">Un jour, une question chacun. Et vos réponses, rien qu'à vous.</p>`);
+  $("#authForm").onsubmit = async e => { e.preventDefault(); const f=new FormData(e.target); try { await signInWithEmailAndPassword(auth,f.get("email"),f.get("password")); } catch(err){$("#authError").textContent=niceError(err);} };
+  $("#signup").onclick = async () => { const f=new FormData($("#authForm")); try { await createUserWithEmailAndPassword(auth,f.get("email"),f.get("password")); } catch(err){$("#authError").textContent=niceError(err);} };
+}
+function niceError(e){ return e.code==="auth/email-already-in-use"?"Cette adresse possède déjà un compte.":e.code==="auth/invalid-credential"?"Adresse ou mot de passe incorrect.":e.message; }
+
+async function loadProfile() {
+  const ref=doc(db,"users",currentUser.uid), snap=await getDoc(ref);
+  if(!snap.exists()){ await setDoc(ref,{email:currentUser.email,displayName:"",coupleId:null,createdAt:serverTimestamp()}); profile={email:currentUser.email,coupleId:null};}
+  else profile=snap.data();
+  if(!profile.coupleId) pairingScreen(); else dashboard();
+}
+function pairingScreen(){
+  shell(`<header class="brand"><div class="heart">♡</div><h1>Entre Nous</h1><p>Reliez vos deux comptes</p></header>
+  <section class="panel"><h2>Créer votre espace à deux</h2><p class="muted">Un seul de vous crée le code, puis l'autre le saisit sur son téléphone.</p>
+  <button class="primary" id="create">Créer notre espace</button><div class="or">ou</div>
+  <label>Code de votre partenaire<input id="joinCode" placeholder="Ex. A7K9P2" maxlength="6" autocapitalize="characters"></label>
+  <button class="secondary" id="join">Rejoindre l'espace</button><p id="pairError" class="error"></p></section>
+  <button class="link" id="logout">Se déconnecter</button>`);
+  $("#create").onclick=async()=>{try{const code=Math.random().toString(36).slice(2,8).toUpperCase(); const coupleId=code; await setDoc(doc(db,"couples",coupleId),{members:[currentUser.uid],createdAt:serverTimestamp(),streak:0,lastCompletedDay:null}); await updateDoc(doc(db,"users",currentUser.uid),{coupleId}); profile.coupleId=coupleId; dashboard();}catch(e){$("#pairError").textContent=e.message;}};
+  $("#join").onclick=async()=>{try{const code=$("#joinCode").value.trim().toUpperCase();if(code.length!==6)throw Error("Entre le code à 6 caractères.");await runTransaction(db,async tx=>{const c=doc(db,"couples",code),s=await tx.get(c);if(!s.exists())throw Error("Code introuvable.");const members=s.data().members||[];if(members.length>=2)throw Error("Cet espace est déjà complet.");if(!members.includes(currentUser.uid))tx.update(c,{members:[...members,currentUser.uid]});tx.update(doc(db,"users",currentUser.uid),{coupleId:code});});profile.coupleId=code;dashboard();}catch(e){$("#pairError").textContent=e.message;}};
+  $("#logout").onclick=()=>signOut(auth);
+}
+function dashboard(){
+  if(stopDayListener)stopDayListener();
+  shell(`<header class="top"><div><div class="eyebrow">VOTRE RITUEL À DEUX</div><h1>Entre Nous <span>♡</span></h1></div><button class="tiny" id="logout">Quitter</button></header>
+  <section class="streak"><div class="flame">🔥</div><div><strong id="streak">0 jour</strong><small>Votre série ensemble</small></div><div class="right">21:00<br><small>Rappel quotidien</small></div></section>
+  <div class="date" id="dateLabel"></div><section id="day" class="panel"><p class="loading">Chargement de votre journée…</p></section>
+  <section class="panel history"><h3>Votre rituel</h3><p class="muted">Vos journées terminées et vos réponses resteront ici.</p><div id="history"></div></section>
+  <p class="foot">Deux questions. Deux réponses. Un petit bout de vous, chaque jour.</p>`);
+  $("#logout").onclick=()=>signOut(auth);
+  $("#dateLabel").textContent=new Intl.DateTimeFormat("fr-FR",{weekday:"long",day:"numeric",month:"long"}).format(new Date());
+  const dayRef=doc(db,"couples",profile.coupleId,"days",today());
+  stopDayListener=onSnapshot(dayRef,snap=>renderDay(snap.exists()?snap.data():null,dayRef));
+  loadStreak(); loadHistory();
+}
+async function loadStreak(){const s=await getDoc(doc(db,"couples",profile.coupleId));$("#streak").textContent=(s.data()?.streak||0)+" jour"+((s.data()?.streak||0)>1?"s":"");}
+async function renderDay(data,ref){
+  const me=currentUser.uid; const members=(await getDoc(doc(db,"couples",profile.coupleId))).data().members||[];
+  const partner=members.find(x=>x!==me); const myQuestion=data?.questions?.[me]||""; const theirQuestion=partner?(data?.questions?.[partner]||""):"";
+  const myAnswer=data?.answers?.[me]||""; const theirAnswer=data?.answers?.[partner]||"";
+  const bothQuestions=!!myQuestion&&!!theirQuestion, bothAnswers=!!myAnswer&&!!theirAnswer;
+  const box=(title,q,placeholder,id,disabled)=>`<div class="question"><b>${title}</b>${q?`<p class="quote">${esc(q)}</p>`:`<textarea id="${id}" maxlength="240" placeholder="${placeholder}" ${disabled?"disabled":""}></textarea><button class="small primary" id="${id}Btn" ${disabled?"disabled":""}>Envoyer ma question</button>`}</div>`;
+  let html=`<div class="tag">AUJOURD'HUI · 1 QUESTION CHACUN</div>
+  ${box("Ta question pour Emma",myQuestion,"Écris UNE question pour Emma…","qMine",false)}
+  ${box("La question d'Emma pour toi",theirQuestion,"En attente de la question d'Emma…","qPartner",true)}
+  <div class="separator"></div>`;
+  if(!myQuestion) html=html.replace('En attente de la question d\\'Emma…','La question apparaîtra ici quand elle l’aura envoyée.');
+  if(bothQuestions){
+    html+=`<div class="question"><b>Ta réponse</b>${myAnswer?`<p class="quote">${esc(myAnswer)}</p><span class="done">✓ Réponse envoyée</span>`:`<p class="muted">${esc(theirQuestion)}</p><textarea id="aMine" maxlength="1000" placeholder="Écris ta réponse…"></textarea><button class="small primary" id="aMineBtn">Envoyer ma réponse</button>`}</div>`;
+    html+=`<div class="question"><b>Réponse d'Emma</b>${bothAnswers?`<p class="quote">${esc(theirAnswer)}</p>`:`<div class="locked">🔒 Cachée jusqu'à ce que vous ayez tous les deux répondu.</div>`}</div>`;
+  } else html+=`<div class="locked">🔒 Les réponses s'ouvriront quand vous aurez chacun posé votre question.</div>`;
+  if(bothAnswers) html+=`<div class="revealed">💗 Vous avez terminé votre journée ! Vos réponses sont révélées.</div>`;
+  $("#day").innerHTML=html;
+  const saveQuestion=async()=>{const v=$("#qMine").value.trim();if(!v)return;await runTransaction(db,async tx=>{const s=await tx.get(ref),d=s.exists()?s.data():{questions:{},answers:{}};if(d.questions?.[me])throw Error("Tu as déjà posé ta question aujourd'hui.");tx.set(ref,{...d,questions:{...(d.questions||{}),[me]:v},date:today(),updatedAt:serverTimestamp()});});};
+  if($("#qMineBtn"))$("#qMineBtn").onclick=()=>saveQuestion().catch(alert);
+  if($("#aMineBtn"))$("#aMineBtn").onclick=async()=>{const v=$("#aMine").value.trim();if(!v)return;try{await runTransaction(db,async tx=>{const s=await tx.get(ref),d=s.data();if(d.answers?.[me])throw Error("Tu as déjà répondu.");const answers={...(d.answers||{}),[me]:v};tx.set(ref,{...d,answers,updatedAt:serverTimestamp()});if(Object.keys(answers).length===2){const cRef=doc(db,"couples",profile.coupleId),c=await tx.get(cRef);const cd=c.data();if(cd.lastCompletedDay!==today())tx.update(cRef,{streak:(cd.streak||0)+1,lastCompletedDay:today()});}}); }catch(e){alert(e.message);}};
+}
+async function loadHistory(){
+  const q=query(collection(db,"couples",profile.coupleId,"days"),orderBy("date","desc"),limit(7));const snap=await getDocs(q);
+  $("#history").innerHTML=snap.empty?'<p class="muted">Votre première journée commence ici ✨</p>':snap.docs.map(d=>{const x=d.data();return `<div class="historyrow"><span>${esc(new Intl.DateTimeFormat("fr-FR",{day:"numeric",month:"short"}).format(new Date(x.date+"T12:00:00")))}</span><span>${Object.keys(x.answers||{}).length===2?"💗 Révélée":"En cours"}</span></div>`;}).join("");
+}
+async function start(){
+  if(!configured){shell(`<header class="brand"><div class="heart">♡</div><h1>Entre Nous</h1><p>La première version prend forme.</p></header><section class="panel"><h2>Configuration nécessaire</h2><p>Ajoute les identifiants Firebase dans <code>src/main.js</code>, puis suis le guide README pour activer les comptes et la synchronisation.</p></section>`);return;}
+  const app=initializeApp(firebaseConfig);auth=getAuth(app);db=getFirestore(app);
+  onAuthStateChanged(auth,async u=>{currentUser=u;if(u)await loadProfile();else authScreen();});
+}
+start();
+if("serviceWorker" in navigator) window.addEventListener("load",()=>navigator.serviceWorker.register("/sw.js").catch(()=>{}));
+"""
+files["src/style.css"] = r"""*{box-sizing:border-box}body{margin:0;background:#fff9fb;color:#382a30;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif}.wrap{max-width:520px;margin:auto;padding:22px 17px 40px}.brand{text-align:center;padding:32px 10px 24px}.heart{font-size:48px;color:#d96c91}.brand h1,.top h1{font-family:Georgia,serif;font-size:34px;margin:4px 0;color:#704052}.brand p,.muted,.foot{color:#927d86}.panel{background:white;border:1px solid #f0dfe6;border-radius:22px;padding:20px;margin:14px 0;box-shadow:0 8px 28px #7444580b}.panel h2{margin-top:0}.panel h3{margin:0 0 8px}.panel label{display:block;font-size:13px;font-weight:650;margin:14px 0;color:#705663}input,textarea{width:100%;padding:13px;border:1px solid #ead7df;border-radius:12px;margin-top:7px;font:inherit;background:#fffdfd;color:#382a30}textarea{min-height:88px;resize:vertical}button{border:0;border-radius:13px;padding:13px 16px;font:inherit;font-weight:700;cursor:pointer}.primary{background:#d96c91;color:white}.secondary{background:#f8eaf0;color:#80445c}.panel form button{width:100%;margin-top:12px}.error{color:#b33c56;font-size:13px}.foot{text-align:center;font-size:12px;padding:16px}.top{display:flex;justify-content:space-between;align-items:center;padding:14px 2px}.top h1{font-size:29px}.top h1 span{color:#d96c91}.eyebrow,.tag{font-size:10px;letter-spacing:1.5px;color:#bd7891;font-weight:800}.tiny,.link{background:transparent;color:#927d86;font-size:12px}.streak{display:flex;align-items:center;gap:12px;background:#faedf2;border-radius:18px;padding:15px 17px;margin:12px 0 20px}.flame{font-size:30px}.streak strong{display:block;font-size:20px;color:#85455e}.streak small{display:block;color:#987d88;font-size:11px}.right{margin-left:auto;text-align:right;font-weight:700;color:#85455e;font-size:13px}.date{text-transform:capitalize;text-align:center;color:#927d86;font-size:13px;margin:14px}.question{padding:14px 0;border-bottom:1px solid #f3e7ec}.question:last-child{border:0}.question b{font-size:14px;color:#75475a}.quote{background:#fff5f8;border-radius:12px;padding:12px;line-height:1.5}.small{width:100%;margin-top:8px;padding:11px}.locked{padding:13px;background:#f8f3f5;border-radius:12px;color:#927d86;font-size:13px}.done{font-size:12px;color:#36835b}.revealed{background:#edf8f1;padding:13px;border-radius:12px;color:#34734f;font-size:13px}.separator{height:1px;background:#f0e2e8;margin:12px 0}.or{text-align:center;color:#b19ba4;padding:14px}.historyrow{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f4eaf0;font-size:13px}.loading{text-align:center;color:#9a7c89}.history{margin-top:20px}"""
+files["sw.js"] = """self.addEventListener('install',e=>self.skipWaiting());\nself.addEventListener('activate',e=>e.waitUntil(self.clients.claim()));\nself.addEventListener('notificationclick',e=>{e.notification.close();e.waitUntil(clients.openWindow('/'));});"""
+files["firestore.rules"] = """rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function member(coupleId) {
+      return signedIn() && request.auth.uid in get(/databases/$(database)/documents/couples/$(coupleId)).data.members;
+    }
+    match /users/{uid} {
+      allow read, write: if signedIn() && request.auth.uid == uid;
+    }
+    match /couples/{coupleId} {
+      allow read: if member(coupleId);
+      allow create: if signedIn() && request.resource.data.members.size() == 1 && request.auth.uid in request.resource.data.members;
+      allow update: if member(coupleId) && request.resource.data.members.size() <= 2;
+      match /days/{dayId} {
+        allow read: if member(coupleId);
+        allow create, update: if member(coupleId);
+      }
+    }
+  }
+}"""
+files["README.md"] = """# Entre Nous ♡ — première base Android
+
+Cette archive contient le **code source d'une application web installable (PWA)**. Elle n'est pas encore un APK prêt à installer. Elle est pensée pour deux téléphones Android, avec un espace commun et un rituel quotidien.
+
+## Fonctionnement prévu
+- Deux comptes séparés (Rémi et Emma).
+- Un code à 6 caractères pour relier les comptes.
+- Une question écrite par chacun par jour.
+- Une réponse par personne à la question reçue.
+- Les réponses ne sont affichées qu'après les deux réponses.
+- Une série commune et un historique des derniers jours.
+- Interface conçue pour un écran de téléphone.
+
+## Important : configuration nécessaire
+La synchronisation à distance nécessite un projet Firebase. Les identifiants ne sont pas inclus dans cette archive.
+
+1. Créez un projet sur https://console.firebase.google.com/
+2. Ajoutez une application Web dans les paramètres du projet.
+3. Activez **Authentication > Email/Password**.
+4. Créez une base **Cloud Firestore**.
+5. Copiez la configuration Firebase dans `src/main.js`, à la place des valeurs `REMPLACER`.
+6. Publiez le contenu de `firestore.rules` dans l'onglet Rules de Firestore.
+7. Installez Node.js sur un ordinateur, puis dans le dossier du projet :
+   - `npm install`
+   - `npm run build`
+8. Hébergez le dossier `dist` sur un hébergement HTTPS (Firebase Hosting convient).
+9. Ouvrez l'adresse HTTPS sur chaque Android avec Chrome, puis menu ⋮ > **Installer l'application** ou **Ajouter à l'écran d'accueil**.
+
+## Notifications à 21 h
+Le rappel quotidien à 21 h n'est **pas encore activé dans cette première base**. Les notifications fiables lorsque l'application est fermée nécessitent un service push (Firebase Cloud Messaging), un service worker configuré avec la clé VAPID et une fonction serveur planifiée. Il faut aussi demander l'autorisation de notification sur chaque téléphone. Une notification web à heure fixe ne peut pas être garantie par un simple minuteur dans une page web.
+
+## À terminer avant usage réel
+Cette base est un démarrage de développement, pas un service prêt pour des données privées. Les règles Firestore fournies sont un point de départ et doivent être renforcées : validation serveur stricte du nombre de questions/réponses, prévention des modifications après envoi, gestion des fuseaux horaires et calcul de streak robuste. Le code de liaison des comptes doit également être durci contre les essais de codes. Ne saisissez pas d'informations intimes tant que cette sécurisation n'est pas terminée.
+
+## Limites de cette première version
+- Le rappel 21 h est à intégrer.
+- Le streak est simplifié et devra gérer les journées manquées sans ambiguïté.
+- L'historique liste les journées mais n'affiche pas encore le détail des anciennes réponses.
+- L'installation se fait comme une application PWA depuis Chrome, pas encore comme un APK Play Store.
+"""
+for name, content in files.items():
+    path=os.path.join(root,name)
+    os.makedirs(os.path.dirname(path),exist_ok=True)
+    if isinstance(content,dict):
+        with open(path,"w",encoding="utf-8") as f: json.dump(content,f,ensure_ascii=False,indent=2)
+    else:
+        with open(path,"w",encoding="utf-8") as f: f.write(content)
+zip_path="/mnt/data/Entre_Nous_source.zip"
+with zipfile.ZipFile(zip_path,"w",zipfile.ZIP_DEFLATED) as z:
+    for base,_,names in os.walk(root):
+        for name in names:
+            p=os.path.join(base,name)
+            z.write(p,os.path.relpath(p,root))
+print(zip_path)
