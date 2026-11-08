@@ -20,7 +20,7 @@ input,textarea,select{width:100%;padding:13px;margin:7px 0;border:1px solid #665
 textarea{min-height:92px;resize:vertical}
 input[type=checkbox]{width:auto;margin-right:8px}
 label.row{display:flex;align-items:center;font-size:15px;color:#e8d6ef;margin:6px 0}
-button{width:100%;padding:13px;margin:7px 0;border:0;border-radius:12px;background:#d69acb;color:#24172b;font-size:16px;font-weight:bold;font-family:inherit}
+button{width:100%;padding:13px;margin:7px 0;border:0;border-radius:12px;background:linear-gradient(135deg,#e9a6d8,#b99af2);color:#24172b;font-size:16px;font-weight:bold;font-family:inherit}
 button.secondary{background:#51415f;color:#fff}
 button.danger{background:#6b2b3a;color:#fff;width:auto;padding:8px 12px;font-size:13px}
 button.small{width:auto;padding:8px 14px;font-size:14px}
@@ -53,20 +53,70 @@ canvas{width:100%;aspect-ratio:1/1;border-radius:14px;touch-action:none;backgrou
 .colors i.sel{border-color:#fff}
 .badge{display:inline-block;font-size:12px;padding:3px 9px;border-radius:99px;background:#51415f;color:#fff;margin-left:6px}
 .lock{color:#f3bde7}
-nav{position:fixed;left:0;right:0;bottom:0;display:grid;grid-template-columns:repeat(4,1fr);gap:4px;background:#1d1729;border-top:1px solid #51415f;padding:6px 6px calc(6px + env(safe-area-inset-bottom));z-index:50}
-nav button{width:100%;min-width:0;margin:0;background:none;color:#cbbbd5;font-size:11px;font-weight:normal;padding:5px 2px;border-radius:10px}
-nav button span{display:block;font-size:22px}
-nav button.sel{color:#fff;background:#382d43}
-#toast{position:fixed;left:14px;right:14px;bottom:150px;background:#f3bde7;color:#24172b;padding:13px 16px;border-radius:14px;z-index:99;text-align:center;font-weight:bold;opacity:0;pointer-events:none;transition:opacity .3s}
+#toast{position:fixed;left:14px;right:14px;bottom:100px;background:#f3bde7;color:#24172b;padding:13px 16px;border-radius:14px;z-index:99;text-align:center;font-weight:bold;opacity:0;pointer-events:none;transition:opacity .3s}
 #toast.on{opacity:1}
 .streakRow{display:flex;justify-content:space-around;text-align:center}
 .big{font-family:Georgia,serif;font-size:38px;color:#f3bde7}
 details summary{cursor:pointer;color:#f3bde7;font-weight:bold;padding:6px 0}
+:root{--line:rgba(255,255,255,.09);--pink:#e9a6d8;--violet:#a98bf0;--mut:#cbbbd5;--card:rgba(41,34,56,.8)}
+body.in{padding-top:78px;padding-bottom:128px}
+#topbar{position:fixed;top:0;left:0;right:0;z-index:40;display:flex;align-items:center;gap:10px;padding:calc(10px + env(safe-area-inset-top)) 14px 10px;background:rgba(23,19,33,.74);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+#topbar .brand{margin-left:auto;font-family:Georgia,"Times New Roman",serif;color:var(--pink);font-size:15px;white-space:nowrap}
+#pageTitle{font-family:Georgia,"Times New Roman",serif;font-size:21px;line-height:1.1}
+#backBtn{width:38px;height:38px;padding:0;margin:0;border-radius:50%;background:rgba(255,255,255,.1);color:#fff;font-size:24px;line-height:1;flex:0 0 auto}
+nav{position:fixed;left:50%;transform:translateX(-50%);width:calc(100% - 24px);max-width:480px;bottom:calc(10px + env(safe-area-inset-bottom));display:flex;gap:2px;padding:6px;background:rgba(32,25,46,.84);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);border:1px solid var(--line);border-radius:28px;box-shadow:0 14px 38px rgba(0,0,0,.5);z-index:50}
+nav button{flex:1;min-width:0;width:auto;margin:0;padding:8px 2px 6px;background:none;color:#a99bb8;font-size:10.5px;font-weight:600;border-radius:22px;display:flex;flex-direction:column;align-items:center;gap:3px;transition:color .2s,background .25s,transform .2s}
+nav button svg{width:23px;height:23px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;transition:transform .25s}
+nav button.sel{color:#fff;background:linear-gradient(135deg,rgba(233,166,216,.34),rgba(169,139,240,.3));box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
+nav button.sel svg{stroke:var(--pink);transform:translateY(-1px) scale(1.1)}
+nav button:active{transform:scale(.94)}
+.tab{animation:tabIn .3s ease both}
+@keyframes tabIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.tab{animation:none}nav button,nav button svg{transition:none}}
+#tab-story{display:flex;flex-direction:column}
+#tab-story.hidden{display:none!important}
+#tab-story>.card{margin:7px 0}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tile{display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;gap:10px;margin:0;padding:16px;border-radius:22px;background:var(--card);border:1px solid var(--line);color:#fff;font-size:15px;font-weight:600;text-align:left;min-height:104px;width:100%;box-shadow:0 8px 22px rgba(0,0,0,.18)}
+.tile span{font-size:28px}
+.tile:active{transform:scale(.97)}
+.hero{text-align:center;background:linear-gradient(160deg,rgba(233,166,216,.2),rgba(169,139,240,.15)),rgba(41,34,56,.92)}
+.heroLabel{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--pink)}
+.heroDays{font-family:Georgia,"Times New Roman",serif;font-size:68px;line-height:1;margin:8px 0}
+.heroDays small{display:block;font-family:system-ui,sans-serif;font-size:14px;color:var(--mut);margin-top:6px}
+.ymd{font-size:14px;color:#ecd9f1;margin-bottom:6px}
+.live{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0}
+.live div{background:rgba(255,255,255,.08);border-radius:14px;padding:10px 2px}
+.live b{display:block;font-size:20px;font-variant-numeric:tabular-nums}
+.live span{font-size:10px;color:var(--mut)}
+.chips{display:flex;flex-direction:column;gap:8px;text-align:left}
+.chip{background:rgba(255,255,255,.08);border-radius:14px;padding:10px 12px;font-size:14px;line-height:1.5}
+.phrase{font-family:Georgia,"Times New Roman",serif;font-size:19px;line-height:1.5;text-align:center;padding:8px 4px;color:#fbe3f5}
+.padWrap{background:#120e1b;border-radius:20px;padding:8px;border:1px solid var(--line)}
+#padCanvas{width:100%;aspect-ratio:1/1;border-radius:14px;touch-action:none;display:block}
+.padBar{display:flex;gap:8px;align-items:center;margin:10px 0;flex-wrap:wrap}
+.tool{width:auto;margin:0;padding:9px 13px;border-radius:14px;background:rgba(255,255,255,.1);color:#fff;font-size:14px;font-weight:600}
+.tool.sel{background:linear-gradient(135deg,#e9a6d8,#b99af2);color:#24172b}
+.sw{width:32px;height:32px;border-radius:50%;border:3px solid transparent;margin:0;padding:0;flex:0 0 auto;box-shadow:inset 0 0 0 1px rgba(255,255,255,.25)}
+.sw.sel{border-color:#fff}
+input[type=range]{padding:0;margin:8px 0;accent-color:#e9a6d8}
+.dgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.dthumb{background:#120e1b;border-radius:16px;overflow:hidden;aspect-ratio:1/1;padding:0;margin:0;width:100%;position:relative}
+.dthumb img{width:100%;height:100%;object-fit:cover;display:block}
+#lightbox{position:fixed;inset:0;background:rgba(10,7,16,.94);z-index:100;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:18px;gap:10px}
+#lightbox img{max-width:100%;max-height:66vh;border-radius:16px}
+#lightbox button{max-width:320px}
+.cap{border-left:3px solid var(--pink)}
+.capTag{display:inline-block;font-size:12px;padding:3px 10px;border-radius:99px;background:rgba(233,166,216,.2);color:#f6cdee;font-weight:700;margin-bottom:6px}
+.sealrow{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+.sealrow span{font-size:12px;background:rgba(255,255,255,.08);padding:4px 10px;border-radius:99px;color:#ecd9f1}
 </style>
 </head>
 <body>
+<div id="topbar" class="hidden"><button id="backBtn" class="hidden" aria-label="Retour">‹</button><div id="pageTitle">Accueil</div><div class="brand">Entre Nous ♡</div></div>
+<div id="lightbox" class="hidden"><img id="lbImg" alt=""><div class="small" id="lbTitle" style="text-align:center"></div><button id="lbDelete" class="danger hidden">Supprimer ce dessin</button><button class="secondary" id="lbClose">Fermer</button></div>
 <main>
-<header>
+<header id="hdr">
 <h1>Entre Nous ♡</h1>
 <p>Notre petit rendez-vous quotidien.</p>
 </header>
@@ -84,9 +134,9 @@ details summary{cursor:pointer;color:#f3bde7;font-weight:bold;padding:6px 0}
 
 <div id="app" class="hidden">
 
-<!-- ===== AUJOURD'HUI ===== -->
+<!-- ===== ACCUEIL ===== -->
 <div class="tab" id="tab-today">
- <div class="card hidden" id="lock-today"><h2>🔒 Bienvenue</h2><p class="small" id="lockmsg-today"></p><button class="secondary" data-goto="together">Aller à « Ensemble »</button></div>
+ <div class="card hidden" id="lock-today"><h2>🔒 Bienvenue</h2><p class="small" id="lockmsg-today"></p><button class="secondary" data-goto="story">Aller à « Notre histoire »</button></div>
  <div id="body-today">
   <div class="card">
    <div class="streakRow">
@@ -97,7 +147,7 @@ details summary{cursor:pointer;color:#f3bde7;font-weight:bold;padding:6px 0}
 
   <div class="card hidden" id="waitPartner">
    <h2>⏳ En attente de ton/ta partenaire</h2>
-   <p class="small">Partage-lui votre code de couple (onglet « Ensemble »). Dès qu'il ou elle l'aura saisi, tout s'activera ici.</p>
+   <p class="small">Partage-lui votre code de couple (onglet « Histoire »). Dès qu'il ou elle l'aura saisi, tout s'activera ici.</p>
   </div>
 
   <section class="card" id="daily">
@@ -144,7 +194,7 @@ details summary{cursor:pointer;color:#f3bde7;font-weight:bold;padding:6px 0}
 
 <!-- ===== MESSAGES ET APPELS ===== -->
 <div class="tab hidden" id="tab-messages">
- <div class="card hidden" id="lock-messages"><h2>🔒 Messages et appels</h2><p class="small" id="lockmsg-messages"></p><button class="secondary" data-goto="together">Aller à « Ensemble »</button></div>
+ <div class="card hidden" id="lock-messages"><h2>🔒 Messages et appels</h2><p class="small" id="lockmsg-messages"></p><button class="secondary" data-goto="story">Aller à « Notre histoire »</button></div>
  <div id="body-messages">
   <section class="card">
    <h2>💬 Messages et appels</h2>
@@ -153,8 +203,8 @@ details summary{cursor:pointer;color:#f3bde7;font-weight:bold;padding:6px 0}
  </div>
 </div>
 
-<!-- ===== ENSEMBLE ===== -->
-<div class="tab hidden" id="tab-together">
+<!-- ===== NOTRE HISTOIRE ===== -->
+<div class="tab hidden" id="tab-story">
  <section class="card" id="pairBox">
   <h2>💞 Notre espace à deux</h2>
   <p class="small">Crée votre espace ou rejoins celui de ton partenaire. En attendant, tu peux explorer tous les onglets.</p>
@@ -164,6 +214,7 @@ details summary{cursor:pointer;color:#f3bde7;font-weight:bold;padding:6px 0}
   <button class="secondary" id="joinCouple">Rejoindre avec un code</button>
   <p class="status" id="pairStatus"></p>
  </section>
+
  <section class="card hidden" id="coupleBox">
   <h2>💌 Notre code</h2>
   <p class="small">Code de couple à partager avec ton partenaire :</p>
@@ -171,23 +222,126 @@ details summary{cursor:pointer;color:#f3bde7;font-weight:bold;padding:6px 0}
   <button class="secondary" id="copyCode">Copier le code</button>
   <p class="small">Gardez ce code privé. Ne le publiez pas.</p>
  </section>
- <section class="card hidden" id="sinceBox">
-  <h2>💞 Ensemble depuis</h2>
-  <div class="streakRow"><div><div class="big" id="sinceDays">–</div><div class="small">jours ensemble</div></div></div>
-  <p class="small status" id="sinceDetail"></p>
-  <input id="sinceDate" type="date">
-  <button class="secondary" id="saveSince">Enregistrer notre date</button>
+
+ <section class="card hero hidden" id="sinceBox">
+  <div class="heroLabel">Notre histoire</div>
+  <div class="heroDays"><span id="sinceDays">–</span><small>jours ensemble</small></div>
+  <div class="ymd" id="sinceYmd">Choisis la date de votre début ci-dessous.</div>
+  <div class="live" id="liveBox">
+   <div><b id="liveD">0</b><span>jours</span></div>
+   <div><b id="liveH">0</b><span>heures</span></div>
+   <div><b id="liveM">0</b><span>minutes</span></div>
+   <div><b id="liveS">0</b><span>secondes</span></div>
+  </div>
+  <div class="chips">
+   <div class="chip">🎂 <b>Prochain anniversaire</b><br><span id="nextAnn">–</span></div>
+   <div class="chip">🏁 <b>Prochain cap</b><br><span id="nextMile">–</span></div>
+  </div>
+  <details id="sinceDetails" style="text-align:left;margin-top:10px">
+   <summary>Modifier la date de début</summary>
+   <input id="sinceDate" type="date">
+   <button class="secondary" id="saveSince">Enregistrer notre date</button>
+  </details>
  </section>
- <section class="card hidden" id="statsBox">
-  <h2>📊 Nos statistiques</h2>
-  <div class="stats" id="statsGrid"></div>
-  <p class="small">Calculées depuis vos données réelles.</p>
+
+ <section class="card hidden" id="phraseBox">
+  <h2>✨ Phrase du jour</h2>
+  <div class="phrase" id="dailyPhrase"></div>
+  <hr>
+  <div id="partnerWordBox" class="hidden">
+   <h3>Le petit mot de l'autre aujourd'hui</h3>
+   <div class="question" id="partnerWord">Pas encore de mot aujourd'hui.</div>
+  </div>
+  <h3>Mon petit mot pour l'autre</h3>
+  <input id="myWord" maxlength="140" placeholder="Écris-lui un petit mot du jour...">
+  <button class="secondary" id="saveWord">Envoyer mon mot</button>
+  <p class="status" id="wordStatus"></p>
  </section>
+
+ <section class="card hidden" id="drawBox">
+  <h2>🎨 Nos dessins</h2>
+  <div class="padWrap">
+   <canvas id="padCanvas" width="900" height="900"></canvas>
+  </div>
+  <div class="padBar" id="padTools">
+   <button class="tool sel" id="toolPen">✏️ Crayon</button>
+   <button class="tool" id="toolEraser">🧽 Gomme</button>
+   <button class="tool" id="toolUndo">↩︎ Annuler</button>
+   <button class="tool" id="toolClear">🗑️ Vider</button>
+  </div>
+  <div class="padBar" id="padColors">
+   <button class="sw sel" data-c="#e0559a" style="background:#e0559a" aria-label="Rose"></button>
+   <button class="sw" data-c="#8a5cf0" style="background:#8a5cf0" aria-label="Violet"></button>
+   <button class="sw" data-c="#2f8de0" style="background:#2f8de0" aria-label="Bleu"></button>
+   <button class="sw" data-c="#2fb07a" style="background:#2fb07a" aria-label="Vert"></button>
+   <button class="sw" data-c="#f5b83d" style="background:#f5b83d" aria-label="Jaune"></button>
+   <button class="sw" data-c="#ef6a4c" style="background:#ef6a4c" aria-label="Orange"></button>
+   <button class="sw" data-c="#222222" style="background:#222222" aria-label="Noir"></button>
+   <button class="sw" data-c="#ffffff" style="background:#ffffff" aria-label="Blanc"></button>
+  </div>
+  <label class="small" for="padSize">Épaisseur du trait</label>
+  <input id="padSize" type="range" min="3" max="44" value="10">
+  <div class="padBar" id="padBgs">
+   <span class="small">Fond :</span>
+   <button class="sw sel" data-bg="#fff8fb" style="background:#fff8fb" aria-label="Fond clair"></button>
+   <button class="sw" data-bg="#1b1530" style="background:#1b1530" aria-label="Fond nuit"></button>
+   <button class="sw" data-bg="#fdf3d8" style="background:#fdf3d8" aria-label="Fond crème"></button>
+  </div>
+  <input id="padTitle" maxlength="100" placeholder="Titre du dessin (facultatif)">
+  <button id="savePad">Enregistrer dans nos dessins</button>
+  <p class="status" id="padStatus"></p>
+  <hr>
+  <h3>Galerie</h3>
+  <div id="drawGallery" class="dgrid"></div>
+ </section>
+</div>
+
+<!-- ===== NOTRE AVENIR ===== -->
+<div class="tab hidden" id="tab-future">
+ <div class="card hidden" id="lock-future"><h2>🔒 Notre avenir</h2><p class="small" id="lockmsg-future"></p><button class="secondary" data-goto="story">Aller à « Notre histoire »</button></div>
+ <div id="body-future">
+  <section class="card">
+   <h2>⏳ Notre avenir</h2>
+   <p class="small">Chacun répond à une question sur votre futur. Les réponses sont <b>scellées</b> : personne, pas même toi, ne peut les relire avant le jour d'ouverture. Ensuite elles restent consultables pour toujours, et vous pouvez en planter une nouvelle.</p>
+   <details id="capForm">
+    <summary>+ Planter une capsule</summary>
+    <p class="small">Ouverture dans :</p>
+    <div class="seg" id="capHoriz">
+     <button class="sel" data-h="6m">6 mois</button>
+     <button data-h="1y">1 an</button>
+     <button data-h="5y">5 ans</button>
+    </div>
+    <select id="capQuestion"></select>
+    <input id="capCustom" class="hidden" maxlength="200" placeholder="Écris ta propre question">
+    <textarea id="capAnswer" maxlength="3000" placeholder="Ta réponse (secrète jusqu'à l'ouverture)..."></textarea>
+    <p class="small" id="capWhen"></p>
+    <button id="plantCap">Sceller ma réponse</button>
+    <p class="status" id="capStatus"></p>
+   </details>
+  </section>
+  <h3>🔒 Scellées</h3>
+  <div id="capPending"></div>
+  <h3>🔓 Ouvertes</h3>
+  <div id="capOpened"></div>
+ </div>
+</div>
+
+<!-- ===== MENU ===== -->
+<div class="tab hidden" id="tab-menu">
+ <div class="tiles">
+  <button class="tile" data-goto="moods"><span>🎭</span>Émotions</button>
+  <button class="tile" data-goto="memories"><span>📸</span>Souvenirs</button>
+  <button class="tile" data-goto="letters"><span>💌</span>Lettres surprises</button>
+  <button class="tile" data-goto="calendar"><span>📅</span>Calendrier</button>
+  <button class="tile" data-goto="stats"><span>📊</span>Statistiques</button>
+  <button class="tile" data-goto="history"><span>📖</span>Historique des questions</button>
+  <button class="tile" data-goto="account"><span>👤</span>Mon compte</button>
+ </div>
 </div>
 
 <!-- ===== ÉMOTIONS ===== -->
 <div class="tab hidden" id="tab-moods">
- <div class="card hidden" id="lock-moods"><h2>🔒 Émotions</h2><p class="small" id="lockmsg-moods"></p><button class="secondary" data-goto="together">Aller à « Ensemble »</button></div>
+ <div class="card hidden" id="lock-moods"><h2>🔒 Émotions</h2><p class="small" id="lockmsg-moods"></p><button class="secondary" data-goto="story">Aller à « Notre histoire »</button></div>
  <div id="body-moods">
   <section class="card" id="moodCard">
    <h2>🎭 Mon humeur du jour</h2>
@@ -210,33 +364,22 @@ details summary{cursor:pointer;color:#f3bde7;font-weight:bold;padding:6px 0}
 
 <!-- ===== SOUVENIRS ===== -->
 <div class="tab hidden" id="tab-memories">
- <div class="card hidden" id="lock-memories"><h2>🔒 Souvenirs</h2><p class="small" id="lockmsg-memories"></p><button class="secondary" data-goto="together">Aller à « Ensemble »</button></div>
+ <div class="card hidden" id="lock-memories"><h2>🔒 Souvenirs</h2><p class="small" id="lockmsg-memories"></p><button class="secondary" data-goto="story">Aller à « Notre histoire »</button></div>
  <div id="body-memories">
   <section class="card">
    <h2>📸 Nos souvenirs</h2>
+   <p class="small">Les dessins faits dans « Notre histoire » apparaissent aussi ici.</p>
    <details id="memForm">
     <summary>+ Ajouter un souvenir</summary>
     <div class="seg" id="memKindSeg">
      <button class="sel" data-kind="text">📝 Texte</button>
      <button data-kind="photo">🖼️ Photo</button>
-     <button data-kind="drawing">🎨 Dessin</button>
     </div>
     <input id="memTitle" maxlength="100" placeholder="Titre">
     <input id="memDate" type="date">
     <div id="photoBlock" class="hidden">
      <input id="memFile" type="file" accept="image/*">
      <p class="small">La photo est réduite automatiquement pour rester légère.</p>
-    </div>
-    <div id="drawBlock" class="hidden">
-     <canvas id="drawCanvas" width="600" height="600"></canvas>
-     <div class="colors" id="penColors">
-      <i data-c="#d6609f" style="background:#d6609f" class="sel"></i>
-      <i data-c="#7b5cd6" style="background:#7b5cd6"></i>
-      <i data-c="#2b8cd6" style="background:#2b8cd6"></i>
-      <i data-c="#3aa56a" style="background:#3aa56a"></i>
-      <i data-c="#222222" style="background:#222222"></i>
-      <button class="secondary small" id="clearDraw">Effacer</button>
-     </div>
     </div>
     <textarea id="memText" maxlength="3000" placeholder="Raconte ce souvenir, cette anecdote..."></textarea>
     <button id="saveMemory">Enregistrer ce souvenir</button>
@@ -249,7 +392,7 @@ details summary{cursor:pointer;color:#f3bde7;font-weight:bold;padding:6px 0}
 
 <!-- ===== LETTRES ===== -->
 <div class="tab hidden" id="tab-letters">
- <div class="card hidden" id="lock-letters"><h2>🔒 Lettres surprises</h2><p class="small" id="lockmsg-letters"></p><button class="secondary" data-goto="together">Aller à « Ensemble »</button></div>
+ <div class="card hidden" id="lock-letters"><h2>🔒 Lettres surprises</h2><p class="small" id="lockmsg-letters"></p><button class="secondary" data-goto="story">Aller à « Notre histoire »</button></div>
  <div id="body-letters">
   <section class="card">
    <h2>💌 Lettres surprises</h2>
@@ -270,7 +413,7 @@ details summary{cursor:pointer;color:#f3bde7;font-weight:bold;padding:6px 0}
 
 <!-- ===== CALENDRIER ===== -->
 <div class="tab hidden" id="tab-calendar">
- <div class="card hidden" id="lock-calendar"><h2>🔒 Calendrier</h2><p class="small" id="lockmsg-calendar"></p><button class="secondary" data-goto="together">Aller à « Ensemble »</button></div>
+ <div class="card hidden" id="lock-calendar"><h2>🔒 Calendrier</h2><p class="small" id="lockmsg-calendar"></p><button class="secondary" data-goto="story">Aller à « Notre histoire »</button></div>
  <div id="body-calendar">
   <section class="card">
    <h2>📅 Notre calendrier</h2>
@@ -293,17 +436,30 @@ details summary{cursor:pointer;color:#f3bde7;font-weight:bold;padding:6px 0}
  </div>
 </div>
 
-<!-- ===== PLUS ===== -->
-<div class="tab hidden" id="tab-more">
- <section class="card" id="historyCard">
+<!-- ===== STATISTIQUES ===== -->
+<div class="tab hidden" id="tab-stats">
+ <section class="card">
+  <h2>📊 Nos statistiques</h2>
+  <div class="stats" id="statsGrid"><p class="small">Les statistiques apparaîtront quand vous serez deux.</p></div>
+  <p class="small">Calculées depuis vos données réelles.</p>
+ </section>
+</div>
+
+<!-- ===== HISTORIQUE ===== -->
+<div class="tab hidden" id="tab-history">
+ <section class="card">
   <h2>📖 Historique</h2>
   <p class="small">Vos anciennes questions et réponses.</p>
   <div id="historyList"><p class="small">Disponible quand vous serez deux.</p></div>
  </section>
+</div>
+
+<!-- ===== COMPTE ===== -->
+<div class="tab hidden" id="tab-account">
  <section class="card">
   <h2>👤 Mon compte</h2>
   <p class="small" id="accountEmail"></p>
-  <p class="small">🔔 Notifications push : pas encore activées. Elles demandent une étape de configuration supplémentaire (voir le guide).</p>
+  <p class="small">🔔 Notifications push : pas encore activées. Elles demandent une étape de configuration supplémentaire.</p>
   <button class="secondary" id="logout">Se déconnecter</button>
  </section>
 </div>
@@ -312,15 +468,12 @@ details summary{cursor:pointer;color:#f3bde7;font-weight:bold;padding:6px 0}
 <p class="small status">Entre Nous ♡ — notre petit monde à deux.</p>
 </main>
 
-<nav id="nav" class="hidden">
- <button class="sel" data-tab="today"><span>🏠</span>Accueil</button>
- <button data-tab="messages"><span>💬</span>Messages</button>
- <button data-tab="together"><span>💞</span>Ensemble</button>
- <button data-tab="moods"><span>🎭</span>Émotions</button>
- <button data-tab="memories"><span>📸</span>Souvenirs</button>
- <button data-tab="letters"><span>💌</span>Lettres</button>
- <button data-tab="calendar"><span>📅</span>Calendrier</button>
- <button data-tab="more"><span>✨</span>Plus</button>
+<nav id="nav" class="hidden" aria-label="Navigation principale">
+ <button class="sel" data-tab="today"><svg viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10.5V20h13v-9.5"/><path d="M10 20v-5h4v5"/></svg>Accueil</button>
+ <button data-tab="messages"><svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 0 1-11.6 7.1L4 20l1-4.1A8 8 0 1 1 20 12Z"/></svg>Messages</button>
+ <button data-tab="story"><svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z"/></svg>Histoire</button>
+ <button data-tab="future"><svg viewBox="0 0 24 24"><path d="M7 3h10"/><path d="M7 21h10"/><path d="M8 3v3.5L12 12l-4 5.5V21"/><path d="M16 3v3.5L12 12l4 5.5V21"/></svg>Avenir</button>
+ <button data-tab="menu"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="6.5" height="6.5" rx="1.8"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.8"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.8"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.8"/></svg>Menu</button>
 </nav>
 <div id="toast"></div>
 
@@ -368,6 +521,72 @@ function nextOccurrence(ev,todayStr){
 }
 function esc(s){
  return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});
+}
+function daysInMonth(y,m){return new Date(Date.UTC(y,m,0)).getUTCDate();}
+function addMonthsStr(s,n){
+ const a=s.split("-").map(Number);
+ const t=a[0]*12+(a[1]-1)+n,y=Math.floor(t/12),m=t%12+1;
+ return y+"-"+pad2(m)+"-"+pad2(Math.min(a[2],daysInMonth(y,m)));
+}
+function ymdBetween(start,end){
+ const a=start.split("-").map(Number),b=end.split("-").map(Number);
+ let total=(b[0]-a[0])*12+(b[1]-a[1]);
+ if(addMonthsStr(start,total)>end)total--;
+ if(total<0)return{y:0,m:0,d:0};
+ return{y:Math.floor(total/12),m:total%12,d:daysBetween(addMonthsStr(start,total),end)};
+}
+function ymdText(b){
+ const p=[];
+ if(b.y)p.push(b.y+(b.y>1?" ans":" an"));
+ if(b.m)p.push(b.m+" mois");
+ if(b.d)p.push(b.d+(b.d>1?" jours":" jour"));
+ return p.length?p.join(", "):"Premier jour ♡";
+}
+const MILESTONES=[100,200,300,365,400,500,600,700,730,800,900,1000,1095,1200,1300,1400,1461,1500,1600,1700,1800,1826,2000,2500,3000,3652,4000,5000];
+function nextMilestone(n){
+ for(const m of MILESTONES)if(m>n)return m;
+ return (Math.floor(n/1000)+1)*1000;
+}
+const PHRASES=[
+ "Chaque jour avec toi est une page de plus de notre plus belle histoire.",
+ "Ça fait {n} jours que tu rends mes journées plus douces.",
+ "Aujourd'hui encore, je choisis nous.",
+ "{n} jours ensemble, et je ne me lasse pas de toi.",
+ "Avec toi, même les jours ordinaires ont une saveur de fête.",
+ "Tu es mon endroit préféré au monde.",
+ "Depuis {n} jours, mon cœur a une adresse : la tienne.",
+ "Merci d'être exactement qui tu es.",
+ "Notre histoire s'écrit un jour à la fois, et j'adore chaque ligne.",
+ "{n} jours de rires, de câlins et de petits riens précieux.",
+ "Je pense à toi plus souvent que tu ne l'imagines.",
+ "Ta main dans la mienne, et le monde devient léger.",
+ "Aujourd'hui, je te souhaite autant de douceur que tu m'en donnes.",
+ "{n} jours que l'on grandit ensemble.",
+ "Tu es mon plus beau hasard devenu évidence.",
+ "Un petit message pour te rappeler que tu comptes énormément pour moi.",
+ "Avec toi, j'ai appris que le bonheur tient dans les détails.",
+ "{n} jours, et chaque matin je suis heureux·se de te savoir là.",
+ "Ce soir ou demain, ce sera toujours toi que j'aurai envie de retrouver.",
+ "Notre amour n'a pas besoin de grands discours : juste de nous.",
+ "Je t'aime aujourd'hui un peu plus qu'hier.",
+ "Merci pour les {n} jours déjà passés, et vive les suivants !",
+ "Tu es ma plus belle habitude.",
+ "Quand tout va vite, penser à toi me fait respirer.",
+ "On a déjà tant de souvenirs, et ce n'est que le début.",
+ "Souris : quelqu'un t'aime très fort aujourd'hui.",
+ "{n} jours à tes côtés, et je signerais pour recommencer.",
+ "Tes yeux sont mon coin de ciel préféré.",
+ "Chaque « nous » commence par un « toi » et un « moi ».",
+ "Aujourd'hui, prends soin de toi : je tiens énormément à toi."
+];
+function dailyPhrase(dateStr,n){
+ const pool=PHRASES.filter(p=>n!=null||p.indexOf("{n}")<0);
+ const gcd=(a,b)=>b?gcd(b,a%b):a;
+ let k=7;
+ while(gcd(k,pool.length)!==1)k+=2;
+ const di=daysBetween("2020-01-01",dateStr);
+ // un pas premier avec la taille de la liste : aucune phrase ne revient avant d'avoir tout parcouru
+ return pool[(((di*k)%pool.length)+pool.length)%pool.length].split("{n}").join(String(n));
 }
 // ===== PURE-END =====
 
@@ -443,7 +662,7 @@ $("resetPw").onclick=async()=>{
 $("logout").onclick=()=>auth.signOut();
 
 // ===== Couple =====
-let currentTab="together",sinceStart=null;
+let currentTab="story",sinceStart=null,liveTimer=null;
 
 async function createCouple(){
  const code=makeCode();
@@ -489,9 +708,12 @@ async function recoverCode(){
  return null;
 }
 
-// Sections qui demandent un couple ("couple") ou un partenaire présent ("partner")
-const TABS=["today","messages","together","moods","memories","letters","calendar","more"];
-const NEEDS={today:"couple",messages:"partner",together:null,moods:"couple",memories:"couple",letters:"partner",calendar:"couple",more:null};
+// ===== Navigation moderne : 5 onglets principaux + menu =====
+const PARENT={moods:"menu",memories:"menu",letters:"menu",calendar:"menu",stats:"menu",history:"menu",account:"menu"};
+const TITLES={today:"Accueil",messages:"Messages",story:"Notre histoire",future:"Notre avenir",menu:"Menu",moods:"Émotions",memories:"Souvenirs",letters:"Lettres surprises",calendar:"Calendrier",stats:"Statistiques",history:"Historique",account:"Mon compte"};
+const TABS=Object.keys(TITLES);
+// "couple" : il faut un espace ; "partner" : il faut aussi que le partenaire ait rejoint
+const NEEDS={today:"couple",messages:"partner",story:null,future:"couple",menu:null,moods:"couple",memories:"couple",letters:"partner",calendar:"couple",stats:null,history:null,account:null};
 
 function renderLocks(){
  TABS.forEach(t=>{
@@ -502,7 +724,7 @@ function renderLocks(){
   if(body)body.classList.toggle("hidden",!ok);
   if(lock&&!ok){
    document.getElementById("lockmsg-"+t).textContent=!couple
-    ?"Crée ou rejoins d'abord votre espace dans l'onglet « Ensemble » pour utiliser cette section. Tu peux continuer à explorer les autres onglets."
+    ?"Crée ou rejoins d'abord votre espace dans l'onglet « Histoire » pour utiliser cette section. Tu peux continuer à explorer les autres onglets."
     :"Ton/ta partenaire n'a pas encore rejoint votre espace. Cette section s'activera dès qu'il ou elle sera là.";
   }
  });
@@ -513,7 +735,9 @@ function applyCouple(data,code){
  otherUid=couple.members.find(u=>u!==user.uid)||null;
  show("waitPartner",!hasPartner());
  show("daily",hasPartner());show("pingCard",hasPartner());show("partnerMoodBox",hasPartner());
- show("pairBox",false);show("coupleBox",true);show("sinceBox",true);show("statsBox",hasPartner());
+ show("pairBox",false);show("coupleBox",true);show("sinceBox",true);show("phraseBox",true);show("drawBox",true);
+ show("partnerWordBox",hasPartner());
+ $("coupleBox").style.order=hasPartner()?"5":"0";
  $("coupleCode").textContent=code;
  renderLocks();
 }
@@ -521,8 +745,9 @@ function applyCouple(data,code){
 function clearCoupleUI(){
  if(pollTimer){clearInterval(pollTimer);pollTimer=null;}
  if(pingUnsub){pingUnsub();pingUnsub=null;}
+ stopLive();
  couple=null;otherUid=null;dayData={};daysCache=[];sinceStart=null;
- show("pairBox",true);show("coupleBox",false);show("sinceBox",false);show("statsBox",false);
+ show("pairBox",true);show("coupleBox",false);show("sinceBox",false);show("phraseBox",false);show("drawBox",false);
  renderLocks();
 }
 
@@ -548,58 +773,30 @@ $("copyCode").onclick=async()=>{
  catch(e){alert("Votre code : "+couple.code);}
 };
 
-// ===== Navigation (toujours libre : aucun écran ne bloque) =====
 function switchTab(name){
+ if(!TITLES[name])name="today";
  currentTab=name;
  document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("hidden",t.id!=="tab-"+name));
- document.querySelectorAll("#nav button").forEach(b=>{
-  const on=b.dataset.tab===name;
-  b.classList.toggle("sel",on);
-  if(on){try{b.scrollIntoView({inline:"center",block:"nearest"});}catch(e){}}
- });
+ const navId=PARENT[name]||name;
+ document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("sel",b.dataset.tab===navId));
+ $("pageTitle").textContent=TITLES[name];
+ show("backBtn",!!PARENT[name]);
  window.scrollTo(0,0);
+ if(name!=="story")stopLive();
  if(!couple)return;
+ if(name==="story")loadStory();
+ if(name==="future")loadCapsules();
  if(name==="memories")loadMemories();
  if(name==="letters")loadLetters();
  if(name==="calendar")loadEvents();
- if(name==="together")loadTogether();
+ if(name==="stats")loadStats();
+ if(name==="history")loadHistory();
  if(name==="moods"){refreshMoods();loadMoodHistory();}
- if(name==="more")loadHistory();
 }
-document.querySelectorAll("#nav button").forEach(b=>b.onclick=()=>switchTab(b.dataset.tab));
-document.querySelectorAll("[data-goto]").forEach(b=>b.onclick=()=>switchTab(b.dataset.goto));
-
-// ===== Ensemble depuis (compteur de jours) =====
-async function loadTogether(){
- if(!couple)return;
- try{
-  const s=await C().collection("settings").doc("together").get();
-  sinceStart=s.exists?s.data().startDate:null;
- }catch(e){}
- renderSince();
- if(hasPartner())loadStats();
-}
-function renderSince(){
- if(sinceStart){
-  const n=daysBetween(sinceStart,today());
-  $("sinceDays").textContent=n>=0?n:0;
-  const nx=nextOccurrence({date:sinceStart,yearly:true},today());
-  const dn=daysBetween(today(),nx);
-  message("sinceDetail","Depuis le "+fmtDate(sinceStart)+" — prochain anniversaire "+(dn===0?"aujourd'hui 🎉":"dans "+dn+" jours"));
-  if(document.activeElement!==$("sinceDate"))$("sinceDate").value=sinceStart;
- }else{
-  $("sinceDays").textContent="–";
-  message("sinceDetail","Choisis ci-dessous la date de votre début.");
- }
-}
-$("saveSince").onclick=async()=>{
- const v=$("sinceDate").value;
- if(!v)return toast("Choisis une date.");
- try{
-  await C().collection("settings").doc("together").set({startDate:v,updatedBy:user.uid,updatedAt:TS()});
-  sinceStart=v;renderSince();toast("Date enregistrée 💞");
- }catch(e){toast("Erreur : "+errText(e));}
-};
+function haptic(){try{if(navigator.vibrate)navigator.vibrate(6);}catch(e){}}
+document.querySelectorAll("#nav button").forEach(b=>b.onclick=()=>{haptic();switchTab(b.dataset.tab);});
+document.querySelectorAll("[data-goto]").forEach(b=>b.onclick=()=>{haptic();switchTab(b.dataset.goto);});
+$("backBtn").onclick=()=>{haptic();switchTab("menu");};
 
 // ===== Question du jour (logique d'origine conservée) =====
 function renderDay(){
@@ -832,21 +1029,11 @@ $("sendPing").onclick=async()=>{
 };
 
 // ===== Souvenirs =====
-const cv=$("drawCanvas"),ctx=cv.getContext("2d");
-let drawing=false,drawn=false;
-function clearCanvas(){ctx.fillStyle="#fff8fb";ctx.fillRect(0,0,cv.width,cv.height);drawn=false;}
-clearCanvas();ctx.lineWidth=7;ctx.lineCap="round";ctx.lineJoin="round";
-function cpos(e){const r=cv.getBoundingClientRect();return{x:(e.clientX-r.left)*cv.width/r.width,y:(e.clientY-r.top)*cv.height/r.height};}
-cv.addEventListener("pointerdown",e=>{drawing=true;drawn=true;ctx.strokeStyle=penColor;ctx.beginPath();const p=cpos(e);ctx.moveTo(p.x,p.y);ctx.lineTo(p.x+.1,p.y+.1);ctx.stroke();try{cv.setPointerCapture(e.pointerId);}catch(x){}e.preventDefault();});
-cv.addEventListener("pointermove",e=>{if(!drawing)return;const p=cpos(e);ctx.lineTo(p.x,p.y);ctx.stroke();e.preventDefault();});
-["pointerup","pointercancel"].forEach(ev=>cv.addEventListener(ev,()=>{drawing=false;}));
-$("clearDraw").onclick=clearCanvas;
-$("penColors").querySelectorAll("i").forEach(i=>i.onclick=()=>{penColor=i.dataset.c;$("penColors").querySelectorAll("i").forEach(x=>x.classList.toggle("sel",x===i));});
 $("memDate").value=today();
 $("memKindSeg").querySelectorAll("button").forEach(b=>b.onclick=()=>{
  memKind=b.dataset.kind;
  $("memKindSeg").querySelectorAll("button").forEach(x=>x.classList.toggle("sel",x===b));
- show("photoBlock",memKind==="photo");show("drawBlock",memKind==="drawing");
+ show("photoBlock",memKind==="photo");
 });
 
 function fileToDataUrl(file,maxSide){
@@ -876,16 +1063,13 @@ $("saveMemory").onclick=async()=>{
    const f=$("memFile").files[0];
    if(!f)return toast("Choisis une photo.");
    data=await fileToDataUrl(f,1000);
-  }else if(memKind==="drawing"){
-   if(!drawn)return toast("Fais d'abord un dessin.");
-   data=cv.toDataURL("image/jpeg",.8);
   }else if(!title&&!text)return toast("Écris quelque chose.");
   if(data&&data.length>740000)return toast("Image trop lourde, essaie une autre photo.");
   $("saveMemory").disabled=true;
   const ref=C().collection("memories").doc();
   await ref.set({kind:memKind,title:title,text:text,date:date,by:user.uid,hasMedia:!!data,createdAt:TS()});
   if(data)await ref.collection("media").doc("main").set({data:data});
-  $("memTitle").value="";$("memText").value="";$("memFile").value="";clearCanvas();
+  $("memTitle").value="";$("memText").value="";$("memFile").value="";
   $("memForm").open=false;
   toast("Souvenir ajouté 💗");
   loadMemories();
@@ -1080,10 +1264,298 @@ async function loadHistoryDay(det){
  }catch(e){box.textContent="Erreur : "+errText(e);}
 }
 
+// ===== Notre histoire =====
+function stopLive(){if(liveTimer){clearInterval(liveTimer);liveTimer=null;}}
+function startLive(){stopLive();tickLive();liveTimer=setInterval(tickLive,1000);}
+function tickLive(){
+ if(!sinceStart){show("liveBox",false);return;}
+ show("liveBox",true);
+ const now=new Date(),n=Math.max(0,daysBetween(sinceStart,today()));
+ $("liveD").textContent=n;
+ $("liveH").textContent=now.getHours();
+ $("liveM").textContent=now.getMinutes();
+ $("liveS").textContent=now.getSeconds();
+}
+
+async function loadStory(){
+ if(!couple)return;
+ try{
+  const s=await C().collection("settings").doc("together").get();
+  sinceStart=s.exists?s.data().startDate:null;
+ }catch(e){}
+ renderStory();
+ loadWords();
+ loadDrawings();
+ startLive();
+}
+
+function renderStory(){
+ const t=today();
+ let n=null;
+ if(sinceStart&&sinceStart<=t){
+  n=daysBetween(sinceStart,t);
+  $("sinceDays").textContent=n;
+  $("sinceYmd").textContent=ymdText(ymdBetween(sinceStart,t))+" — depuis le "+fmtDate(sinceStart);
+  const nx=nextOccurrence({date:sinceStart,yearly:true},t),dn=daysBetween(t,nx);
+  const yrs=Number(nx.slice(0,4))-Number(sinceStart.slice(0,4));
+  const yl=yrs+(yrs>1?" ans":" an");
+  $("nextAnn").textContent=dn===0
+   ?(yrs>0?"🎉 Aujourd'hui : "+yl+" ensemble !":"Premier jour ♡")
+   :fmtDate(nx)+" — dans "+dn+(dn>1?" jours":" jour")+" ("+yl+")";
+  if(MILESTONES.indexOf(n)>=0)$("nextMile").textContent="🎉 Aujourd'hui : "+n+" jours ensemble !";
+  else{const m=nextMilestone(n);$("nextMile").textContent=m+" jours ensemble, dans "+(m-n)+(m-n>1?" jours":" jour");}
+  $("sinceDetails").open=false;
+ }else{
+  $("sinceDays").textContent="–";
+  $("sinceYmd").textContent="Choisis la date de votre début ci-dessous.";
+  $("nextAnn").textContent="–";$("nextMile").textContent="–";
+  $("sinceDetails").open=true;
+ }
+ if(sinceStart&&document.activeElement!==$("sinceDate"))$("sinceDate").value=sinceStart;
+ $("dailyPhrase").textContent=dailyPhrase(t,n);
+ tickLive();
+}
+
+$("saveSince").onclick=async()=>{
+ const v=$("sinceDate").value;
+ if(!v)return toast("Choisis une date.");
+ if(v>today())return toast("La date ne peut pas être dans le futur.");
+ try{
+  await C().collection("settings").doc("together").set({startDate:v,updatedBy:user.uid,updatedAt:TS()});
+  sinceStart=v;renderStory();toast("Date enregistrée 💞");
+ }catch(e){toast("Erreur : "+errText(e));}
+};
+
+// ----- Petit mot du jour -----
+const wordRef=uid=>C().collection("words").doc(today()+"_"+uid);
+async function loadWords(){
+ try{
+  const mine=await wordRef(user.uid).get();
+  if(mine.exists&&document.activeElement!==$("myWord"))$("myWord").value=mine.data().text||"";
+  if(hasPartner()){
+   const o=await wordRef(otherUid).get();
+   $("partnerWord").textContent=o.exists?o.data().text:"Pas encore de mot aujourd'hui.";
+  }
+ }catch(e){}
+}
+$("saveWord").onclick=async()=>{
+ const v=$("myWord").value.trim();
+ if(!v)return toast("Écris ton petit mot d'abord.");
+ try{
+  await wordRef(user.uid).set({uid:user.uid,date:today(),text:v.slice(0,140),updatedAt:TS()});
+  message("wordStatus","Mot envoyé ♡");
+ }catch(e){toast("Erreur : "+errText(e));}
+};
+
+// ----- Planche à dessin moderne -----
+const pad=$("padCanvas"),pctx=pad.getContext("2d");
+let strokes=[],curStroke=null,padColor="#e0559a",padSize=10,padEraser=false,padBg="#fff8fb";
+function styleFor(s){return s.eraser?padBg:s.color;}
+function redrawPad(){
+ pctx.fillStyle=padBg;pctx.fillRect(0,0,pad.width,pad.height);
+ pctx.lineCap="round";pctx.lineJoin="round";
+ for(const s of strokes){
+  const col=styleFor(s);
+  pctx.strokeStyle=col;pctx.fillStyle=col;pctx.lineWidth=s.size;
+  if(s.pts.length===1){pctx.beginPath();pctx.arc(s.pts[0][0],s.pts[0][1],s.size/2,0,Math.PI*2);pctx.fill();continue;}
+  pctx.beginPath();pctx.moveTo(s.pts[0][0],s.pts[0][1]);
+  for(let i=1;i<s.pts.length;i++)pctx.lineTo(s.pts[i][0],s.pts[i][1]);
+  pctx.stroke();
+ }
+}
+redrawPad();
+function padPos(e){const r=pad.getBoundingClientRect();return[(e.clientX-r.left)*pad.width/r.width,(e.clientY-r.top)*pad.height/r.height];}
+pad.addEventListener("pointerdown",e=>{
+ const p=padPos(e);
+ curStroke={color:padColor,size:padSize*(pad.width/412),eraser:padEraser,pts:[p]};
+ strokes.push(curStroke);redrawPad();
+ try{pad.setPointerCapture(e.pointerId);}catch(x){}
+ e.preventDefault();
+});
+pad.addEventListener("pointermove",e=>{
+ if(!curStroke)return;
+ const p=padPos(e),prev=curStroke.pts[curStroke.pts.length-1];
+ curStroke.pts.push(p);
+ pctx.strokeStyle=styleFor(curStroke);pctx.lineWidth=curStroke.size;pctx.lineCap="round";pctx.lineJoin="round";
+ pctx.beginPath();pctx.moveTo(prev[0],prev[1]);pctx.lineTo(p[0],p[1]);pctx.stroke();
+ e.preventDefault();
+});
+["pointerup","pointercancel"].forEach(ev=>pad.addEventListener(ev,()=>{curStroke=null;}));
+function setTool(eraser){
+ padEraser=eraser;
+ $("toolPen").classList.toggle("sel",!eraser);$("toolEraser").classList.toggle("sel",eraser);
+}
+$("toolPen").onclick=()=>setTool(false);
+$("toolEraser").onclick=()=>setTool(true);
+$("toolUndo").onclick=()=>{strokes.pop();redrawPad();};
+$("toolClear").onclick=()=>{if(strokes.length>3&&!confirm("Vider tout le dessin ?"))return;strokes=[];redrawPad();};
+$("padSize").oninput=()=>{padSize=Number($("padSize").value);};
+$("padColors").querySelectorAll("button").forEach(b=>b.onclick=()=>{
+ padColor=b.dataset.c;setTool(false);
+ $("padColors").querySelectorAll("button").forEach(x=>x.classList.toggle("sel",x===b));
+});
+$("padBgs").querySelectorAll("button").forEach(b=>b.onclick=()=>{
+ padBg=b.dataset.bg;redrawPad();
+ $("padBgs").querySelectorAll("button").forEach(x=>x.classList.toggle("sel",x===b));
+});
+
+$("savePad").onclick=async()=>{
+ if(!strokes.length)return toast("Fais d'abord un dessin.");
+ try{
+  $("savePad").disabled=true;
+  let q=.85,data=pad.toDataURL("image/jpeg",q);
+  while(data.length>700000&&q>.3){q-=.1;data=pad.toDataURL("image/jpeg",q);}
+  if(data.length>740000)throw new Error("Dessin trop lourd.");
+  const ref=C().collection("memories").doc();
+  await ref.set({kind:"drawing",title:$("padTitle").value.trim().slice(0,100),text:"",date:today(),by:user.uid,hasMedia:true,createdAt:TS()});
+  await ref.collection("media").doc("main").set({data:data});
+  strokes=[];redrawPad();$("padTitle").value="";
+  message("padStatus","Dessin enregistré 💗");toast("Dessin ajouté à la galerie 🎨");
+  loadDrawings();
+ }catch(e){toast("Erreur : "+errText(e));}
+ finally{$("savePad").disabled=false;}
+};
+
+async function loadDrawings(){
+ try{
+  const snap=await C().collection("memories").orderBy("date","desc").get();
+  const list=snap.docs.map(d=>({id:d.id,...d.data()})).filter(m=>m.kind==="drawing").slice(0,24);
+  const g=$("drawGallery");
+  if(!list.length){g.innerHTML='<p class="small" style="grid-column:1/-1">Aucun dessin pour l\'instant. Faites le premier ! 🎨</p>';return;}
+  g.innerHTML=list.map(m=>'<button class="dthumb" data-did="'+esc(m.id)+'" aria-label="Ouvrir le dessin"><img alt="" style="display:none"></button>').join("");
+  g.querySelectorAll(".dthumb").forEach(async b=>{
+   const m=list.find(x=>x.id===b.dataset.did),img=b.querySelector("img");
+   try{
+    const s=await C().collection("memories").doc(m.id).collection("media").doc("main").get();
+    if(s.exists){img.src=s.data().data;img.style.display="block";}
+   }catch(e){}
+   b.onclick=()=>openLightbox(m,img.src);
+  });
+ }catch(e){}
+}
+function openLightbox(m,src){
+ const mine=m.by===user.uid;
+ $("lbImg").src=src;
+ $("lbTitle").textContent=(m.title||"Sans titre")+" — "+(mine?"par moi":"par ton/ta partenaire")+" · "+fmtDate(m.date);
+ show("lbDelete",mine);
+ show("lightbox",true);
+ $("lbDelete").onclick=async()=>{
+  if(!confirm("Supprimer définitivement ce dessin ?"))return;
+  try{
+   try{await C().collection("memories").doc(m.id).collection("media").doc("main").delete();}catch(e){}
+   await C().collection("memories").doc(m.id).delete();
+   show("lightbox",false);loadDrawings();
+  }catch(e){toast("Erreur : "+errText(e));}
+ };
+}
+$("lbClose").onclick=()=>show("lightbox",false);
+
+// ===== Notre avenir : capsules temporelles =====
+const HORIZ={"6m":{label:"6 mois",months:6},"1y":{label:"1 an",months:12},"5y":{label:"5 ans",months:60}};
+const CAPQ={
+ "6m":["Dans 6 mois, comment tu nous vois ?","Qu'est-ce qu'on aura vécu de beau ensemble d'ici 6 mois ?","Dans 6 mois, de quoi seras-tu le plus fier·ère à propos de nous ?","Qu'espères-tu qu'on aura fait d'ici 6 mois ?"],
+ "1y":["Dans 1 an, où nous vois-tu et que faisons-nous ?","Dans 1 an, quel souvenir voudrais-tu qu'on ait créé ?","Dans 1 an, qu'est-ce qui aura changé entre nous ?","Qu'aimerais-tu qu'on ait appris l'un de l'autre d'ici 1 an ?"],
+ "5y":["Dans 5 ans, à quoi ressemble notre vie ?","Dans 5 ans, quels rêves aura-t-on réalisés ensemble ?","Où habitons-nous dans 5 ans, et avec qui autour de nous ?","Que veux-tu dire à notre « nous » de dans 5 ans ?"]
+};
+let capH="6m";
+
+function capUnlockDate(h){
+ const a=addMonthsStr(today(),HORIZ[h].months).split("-").map(Number);
+ return new Date(a[0],a[1]-1,a[2],0,0,0);
+}
+function renderCapForm(){
+ $("capHoriz").querySelectorAll("button").forEach(b=>b.classList.toggle("sel",b.dataset.h===capH));
+ const opts=CAPQ[capH].map(q=>'<option>'+esc(q)+'</option>').join("")+'<option value="__custom">✍️ Écrire ma propre question…</option>';
+ $("capQuestion").innerHTML=opts;
+ show("capCustom",false);
+ $("capWhen").textContent="S'ouvrira le "+fmtDate(parisDate(capUnlockDate(capH)))+".";
+}
+$("capHoriz").querySelectorAll("button").forEach(b=>b.onclick=()=>{capH=b.dataset.h;renderCapForm();});
+$("capQuestion").onchange=()=>show("capCustom",$("capQuestion").value==="__custom");
+renderCapForm();
+
+async function sealAnswer(id,text){
+ const ref=C().collection("capsules").doc(id);
+ await ref.collection("answers").doc(user.uid).set({text:text,createdAt:TS()});
+ await ref.collection("marks").doc(user.uid).set({at:TS()});
+}
+
+$("plantCap").onclick=async()=>{
+ const sel=$("capQuestion").value,q=(sel==="__custom"?$("capCustom").value:sel).trim(),ans=$("capAnswer").value.trim();
+ if(!q)return toast("Écris ta question.");
+ if(!ans)return toast("Écris ta réponse : elle sera scellée.");
+ try{
+  $("plantCap").disabled=true;
+  const ref=C().collection("capsules").doc();
+  await ref.set({horizon:capH,question:q.slice(0,200),unlockAt:firebase.firestore.Timestamp.fromDate(capUnlockDate(capH)),createdBy:user.uid,createdAt:TS()});
+  await sealAnswer(ref.id,ans);
+  $("capAnswer").value="";$("capCustom").value="";
+  $("capForm").open=false;
+  toast("Capsule scellée 🔒");
+  loadCapsules();
+ }catch(e){toast("Erreur : "+errText(e));}
+ finally{$("plantCap").disabled=false;}
+};
+
+async function loadCapsules(){
+ if(!couple)return;
+ try{
+  const snap=await C().collection("capsules").orderBy("unlockAt","asc").get();
+  const caps=snap.docs.map(d=>({id:d.id,...d.data()}));
+  await Promise.all(caps.map(async c=>{
+   try{const ms=await C().collection("capsules").doc(c.id).collection("marks").get();c.marks=ms.docs.map(d=>d.id);}
+   catch(e){c.marks=[];}
+  }));
+  const now=Date.now(),t=today();
+  const pending=caps.filter(c=>c.unlockAt.toDate().getTime()>now);
+  const opened=caps.filter(c=>c.unlockAt.toDate().getTime()<=now).reverse();
+
+  $("capPending").innerHTML=pending.length?pending.map(c=>{
+   const at=c.unlockAt.toDate(),dn=daysBetween(t,parisDate(at)),meDone=c.marks.indexOf(user.uid)>=0,otherDone=otherUid&&c.marks.indexOf(otherUid)>=0;
+   return '<div class="card cap"><span class="capTag">'+esc(HORIZ[c.horizon]?HORIZ[c.horizon].label:"")+'</span>'+
+    '<h2>'+esc(c.question)+'</h2>'+
+    '<p class="small">🔒 S\'ouvrira le '+esc(fmtDate(parisDate(at)))+' (dans '+dn+(dn>1?" jours":" jour")+')</p>'+
+    '<div class="sealrow"><span>'+(meDone?"✅ Ta réponse est scellée":"✍️ Ta réponse manque")+'</span><span>'+(otherDone?"✅ Sa réponse est scellée":"⏳ Il/elle n'a pas encore répondu")+'</span></div>'+
+    (meDone?'':'<textarea data-ans="'+esc(c.id)+'" maxlength="3000" placeholder="Ta réponse (secrète jusqu\'à l\'ouverture)..."></textarea><button data-seal="'+esc(c.id)+'">Sceller ma réponse</button>')+
+    '</div>';
+  }).join(""):'<div class="card"><p class="small">Aucune capsule scellée. Plantez la première ! ⏳</p></div>';
+
+  $("capOpened").innerHTML=opened.length?opened.map(c=>{
+   const at=c.unlockAt.toDate();
+   return '<div class="card cap"><span class="capTag">'+esc(HORIZ[c.horizon]?HORIZ[c.horizon].label:"")+' · ouverte</span>'+
+    '<h2>'+esc(c.question)+'</h2><p class="small">🔓 Ouverte depuis le '+esc(fmtDate(parisDate(at)))+'</p>'+
+    '<button class="secondary" data-read="'+esc(c.id)+'">Lire nos réponses</button>'+
+    '<div id="cap-'+esc(c.id)+'" class="hidden"></div>'+
+    '<button class="secondary" data-again="'+esc(c.horizon)+'">🔁 Recommencer une capsule de '+esc(HORIZ[c.horizon]?HORIZ[c.horizon].label:"")+'</button></div>';
+  }).join(""):'<div class="card"><p class="small">Aucune capsule ouverte pour l\'instant. Patience… 💗</p></div>';
+
+  $("capPending").querySelectorAll("button[data-seal]").forEach(b=>b.onclick=async()=>{
+   const id=b.dataset.seal,ta=$("capPending").querySelector('textarea[data-ans="'+id+'"]'),v=ta.value.trim();
+   if(!v)return toast("Écris ta réponse : elle sera scellée.");
+   try{b.disabled=true;await sealAnswer(id,v);toast("Réponse scellée 🔒");loadCapsules();}
+   catch(e){toast("Erreur : "+errText(e));b.disabled=false;}
+  });
+  $("capOpened").querySelectorAll("button[data-read]").forEach(b=>b.onclick=async()=>{
+   const id=b.dataset.read,box=$("cap-"+id);
+   try{
+    const ref=C().collection("capsules").doc(id).collection("answers");
+    const [me,ot]=await Promise.all([ref.doc(user.uid).get(),otherUid?ref.doc(otherUid).get():Promise.resolve({exists:false})]);
+    box.innerHTML='<p><strong>Ta réponse :</strong></p><div class="question">'+esc(me.exists?me.data().text:"(pas de réponse)")+'</div>'+
+     '<p><strong>Sa réponse :</strong></p><div class="question">'+esc(ot.exists?ot.data().text:"(pas de réponse)")+'</div>';
+    box.classList.remove("hidden");
+   }catch(e){toast(e&&e.code==="permission-denied"?"Cette capsule est encore scellée.":"Erreur : "+errText(e));}
+  });
+  $("capOpened").querySelectorAll("button[data-again]").forEach(b=>b.onclick=()=>{
+   capH=b.dataset.again;renderCapForm();$("capForm").open=true;window.scrollTo(0,0);
+  });
+ }catch(e){$("capPending").innerHTML='<div class="card"><p class="small">Erreur : '+esc(errText(e))+'</p></div>';}
+}
+
 // ===== Session =====
 auth.onAuthStateChanged(async current=>{
  user=current;
- show("auth",!user);
+ show("auth",!user);show("hdr",!user);show("topbar",!!user);
+ document.body.classList.toggle("in",!!user);
  if(!user){
   show("app",false);show("nav",false);
   if(pingTimer){clearInterval(pingTimer);pingTimer=null;}
@@ -1095,7 +1567,7 @@ auth.onAuthStateChanged(async current=>{
  $("accountEmail").textContent="Connecté : "+user.email;
  renderMoodGrid();
  clearCoupleUI();
- switchTab("together");
+ switchTab("story");
  let saved=localStorage.getItem("entreNousCode");
  if(!saved)saved=await recoverCode();
  if(saved){
