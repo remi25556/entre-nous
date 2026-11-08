@@ -1,3 +1,4 @@
+
 {
   "name": "Entre Nous",
   "short_name": "Entre Nous",
@@ -7,5 +8,17 @@
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#101018",
-  "theme_color": "#171321"
+  "theme_color": "#171321",
+  "icons": [
+    {
+      "src": "./icone entre nous 192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "./icone entre nous 512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
 }
