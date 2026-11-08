@@ -1,33 +1,69 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#171321">
 <title>Entre Nous ♡</title>
+<link rel="manifest" href="./manifest.json">
 <style>
-*{box-sizing:border-box}
-body{margin:0;padding:22px 16px;background:linear-gradient(150deg,#171321,#382442);color:white;font-family:Arial,sans-serif;min-height:100vh}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;padding:18px 14px 96px;background:linear-gradient(150deg,#171321,#382442) fixed;color:#fff;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;min-height:100vh}
 main{max-width:480px;margin:auto}
-header{text-align:center;padding:20px 0}
-h1{font-size:36px;margin:8px}
-header p,.muted{color:#cbbbd5}
-.card{background:#292238;border:1px solid #51415f;border-radius:19px;padding:20px;margin:16px 0}
-input,textarea{width:100%;padding:14px;margin:8px 0;border:1px solid #665477;border-radius:11px;background:#191524;color:white;font-size:16px}
-textarea{min-height:95px;resize:vertical}
-button{width:100%;padding:14px;margin:7px 0;border:0;border-radius:11px;background:#d69acb;color:#24172b;font-size:16px;font-weight:bold}
-button.secondary{background:#51415f;color:white}
+header{text-align:center;padding:14px 0 6px}
+h1{font-family:Georgia,"Times New Roman",serif;font-weight:normal;font-size:34px;margin:6px;letter-spacing:.5px}
+h2{font-family:Georgia,"Times New Roman",serif;font-weight:normal;font-size:21px;margin:0 0 8px}
+h3{font-size:16px;margin:14px 0 6px;color:#f3bde7}
+header p,.muted{color:#cbbbd5;margin:4px 0}
+.card{background:rgba(41,34,56,.92);border:1px solid #51415f;border-radius:20px;padding:18px;margin:14px 0;box-shadow:0 8px 24px rgba(0,0,0,.18)}
+input,textarea,select{width:100%;padding:13px;margin:7px 0;border:1px solid #665477;border-radius:12px;background:#191524;color:#fff;font-size:16px;font-family:inherit}
+textarea{min-height:92px;resize:vertical}
+input[type=checkbox]{width:auto;margin-right:8px}
+label.row{display:flex;align-items:center;font-size:15px;color:#e8d6ef;margin:6px 0}
+button{width:100%;padding:13px;margin:7px 0;border:0;border-radius:12px;background:#d69acb;color:#24172b;font-size:16px;font-weight:bold;font-family:inherit}
+button.secondary{background:#51415f;color:#fff}
+button.danger{background:#6b2b3a;color:#fff;width:auto;padding:8px 12px;font-size:13px}
+button.small{width:auto;padding:8px 14px;font-size:14px}
 button:disabled{opacity:.4}
 .small{font-size:13px;color:#cbbbd5;line-height:1.5}
-.hidden{display:none}
+.hidden{display:none!important}
 .code{font-size:28px;letter-spacing:5px;text-align:center;font-weight:bold;color:#f3bde7}
 .question{background:#382d43;padding:14px;border-radius:12px;line-height:1.5;overflow-wrap:anywhere;white-space:pre-wrap}
 .status{text-align:center;color:#e8c9e5;font-size:14px}
-hr{border:0;border-top:1px solid #51415f;margin:20px 0}
-#swDiagnostic{position:fixed;bottom:10px;left:10px;right:10px;background:white;color:#111;padding:14px;z-index:99999;border-radius:10px;font-size:14px;text-align:center}
+hr{border:0;border-top:1px solid #51415f;margin:18px 0}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat{background:#382d43;border-radius:14px;padding:14px;text-align:center}
+.stat b{display:block;font-size:28px;color:#f3bde7;font-family:Georgia,serif;font-weight:normal}
+.stat span{font-size:12px;color:#cbbbd5}
+.moods{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:8px 0}
+.mood{background:#382d43;border:2px solid transparent;border-radius:14px;padding:8px 2px;text-align:center;font-size:26px;color:#fff;margin:0;width:auto}
+.mood small{display:block;font-size:10px;color:#cbbbd5;font-weight:normal;margin-top:2px}
+.mood.sel{border-color:#d69acb;background:#4a3858}
+.item{background:#382d43;border-radius:14px;padding:12px 14px;margin:10px 0;overflow-wrap:anywhere}
+.item .t{font-weight:bold}
+.item .d{font-size:12px;color:#cbbbd5}
+.item .txt{white-space:pre-wrap;margin-top:6px;line-height:1.5}
+.item img{width:100%;border-radius:12px;margin-top:8px;display:block}
+.seg{display:flex;gap:8px;margin:8px 0}
+.seg button{margin:0;background:#382d43;color:#fff;font-size:14px;padding:10px 4px}
+.seg button.sel{background:#d69acb;color:#24172b}
+canvas{width:100%;aspect-ratio:1/1;border-radius:14px;touch-action:none;background:#fff8fb;display:block}
+.colors{display:flex;gap:10px;margin:8px 0;align-items:center}
+.colors i{width:30px;height:30px;border-radius:50%;border:3px solid transparent;display:block}
+.colors i.sel{border-color:#fff}
+.badge{display:inline-block;font-size:12px;padding:3px 9px;border-radius:99px;background:#51415f;color:#fff;margin-left:6px}
+.lock{color:#f3bde7}
+nav{position:fixed;left:0;right:0;bottom:0;display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;background:#1d1729;border-top:1px solid #51415f;padding:6px 4px calc(6px + env(safe-area-inset-bottom));z-index:50}
+nav::-webkit-scrollbar{display:none}
+nav button{flex:0 0 auto;min-width:76px;margin:0;background:none;color:#cbbbd5;font-size:11px;font-weight:normal;padding:6px 2px;border-radius:10px}
+nav button span{display:block;font-size:22px}
+nav button.sel{color:#fff;background:#382d43}
+#toast{position:fixed;left:14px;right:14px;bottom:90px;background:#f3bde7;color:#24172b;padding:13px 16px;border-radius:14px;z-index:99;text-align:center;font-weight:bold;opacity:0;pointer-events:none;transition:opacity .3s}
+#toast.on{opacity:1}
+.streakRow{display:flex;justify-content:space-around;text-align:center}
+.big{font-family:Georgia,serif;font-size:38px;color:#f3bde7}
+details summary{cursor:pointer;color:#f3bde7;font-weight:bold;padding:6px 0}
 </style>
-<link rel="manifest" href="./manifest.json">
 </head>
 <body>
 <main>
@@ -39,72 +75,303 @@ hr{border:0;border-top:1px solid #51415f;margin:20px 0}
 <section class="card" id="auth">
 <h2>Bienvenue 💗</h2>
 <p class="small">Connecte-toi ou crée ton compte.</p>
-<input id="email" type="email" placeholder="Ton adresse e-mail">
-<input id="password" type="password" placeholder="Mot de passe (6 caractères minimum)">
+<input id="email" type="email" placeholder="Ton adresse e-mail" autocomplete="email">
+<input id="password" type="password" placeholder="Mot de passe (6 caractères minimum)" autocomplete="current-password">
 <button id="signup">Créer mon compte</button>
 <button class="secondary" id="login">Me connecter</button>
+<button class="secondary" id="resetPw">Mot de passe oublié</button>
 <p class="status" id="authStatus"></p>
 </section>
 
-<section class="card hidden" id="pair">
-<h2>💞 Notre espace à deux</h2>
-<p class="small">Crée votre espace ou rejoins celui de ton partenaire.</p>
-<button id="createCouple">Créer notre espace</button>
-<p class="status">— OU —</p>
-<input id="joinCode" placeholder="Code de votre couple" maxlength="8">
-<button class="secondary" id="joinCouple">Rejoindre avec un code</button>
-<p class="status" id="pairStatus"></p>
-</section>
+<div id="app" class="hidden">
 
-<section class="card hidden" id="room">
-<h2>💌 Notre espace</h2>
-<p class="small">Votre code de couple à partager avec ton partenaire :</p>
-<div class="code" id="coupleCode"></div>
-<button class="secondary" id="copyCode">Copier le code</button>
-<p class="small">Gardez ce code privé. Ne le publiez pas.</p>
-<hr>
-<h2>🔥 Notre série</h2>
-<p class="small">Le compteur de jours consécutifs sera ajouté après la mise en place des questions.</p>
-</section>
+<!-- ===== AUJOURD'HUI ===== -->
+<div class="tab" id="tab-today">
+ <div class="card hidden" id="lock-today"><h2>🔒 Bienvenue</h2><p class="small" id="lockmsg-today"></p><button class="secondary" data-goto="together">Aller à « Ensemble »</button></div>
+ <div id="body-today">
+  <div class="card">
+   <div class="streakRow">
+    <div><div class="big" id="streakNow">0</div><div class="small">🔥 jours d'affilée</div></div>
+    <div><div class="big" id="jointDays">0</div><div class="small">💞 jours à deux</div></div>
+   </div>
+  </div>
 
-<section class="card hidden" id="daily">
-<h2>🌷 La question du jour</h2>
-<p class="small">Chacun écrit une question pour l'autre. Une seule question par jour !</p>
-<h3>Ta question</h3>
-<textarea id="myQuestion" maxlength="500" placeholder="Ce que j'aimerais te demander aujourd'hui..."></textarea>
-<button id="sendQuestion">Envoyer ma question</button>
-<p class="status" id="myQuestionStatus"></p>
-<hr>
-<h3>La question de l'autre</h3>
-<div class="question" id="partnerQuestion">En attente de sa question...</div>
-<textarea id="myAnswer" maxlength="1000" placeholder="Ta réponse..."></textarea>
-<button id="sendAnswer">Envoyer ma réponse</button>
-<p class="status" id="myAnswerStatus"></p>
-<hr>
-<h3>💗 Vos réponses</h3>
-<p class="small" id="revealStatus">Elles seront révélées quand vous aurez répondu tous les deux.</p>
-<div id="revealed" class="hidden">
-<p><strong>Ta réponse :</strong></p>
-<div class="question" id="answerOne"></div>
-<p><strong>Sa réponse :</strong></p>
-<div class="question" id="answerTwo"></div>
+  <div class="card hidden" id="waitPartner">
+   <h2>⏳ En attente de ton/ta partenaire</h2>
+   <p class="small">Partage-lui votre code de couple (onglet « Ensemble »). Dès qu'il ou elle l'aura saisi, tout s'activera ici.</p>
+  </div>
+
+  <section class="card" id="daily">
+   <h2>🌷 La question du jour</h2>
+   <p class="small">Chacun écrit une question pour l'autre. Une seule question par jour !</p>
+   <h3>Ta question</h3>
+   <textarea id="myQuestion" maxlength="500" placeholder="Ce que j'aimerais te demander aujourd'hui..."></textarea>
+   <button id="sendQuestion">Envoyer ma question</button>
+   <p class="status" id="myQuestionStatus"></p>
+   <hr>
+   <h3>La question de l'autre</h3>
+   <div class="question" id="partnerQuestion">En attente de sa question...</div>
+   <textarea id="myAnswer" maxlength="1000" placeholder="Ta réponse..."></textarea>
+   <button id="sendAnswer">Envoyer ma réponse</button>
+   <p class="status" id="myAnswerStatus"></p>
+   <hr>
+   <h3>💗 Vos réponses</h3>
+   <p class="small" id="revealStatus">Elles seront révélées quand vous aurez répondu tous les deux.</p>
+   <div id="revealed" class="hidden">
+    <p><strong>Ta réponse :</strong></p>
+    <div class="question" id="answerOne"></div>
+    <p><strong>Sa réponse :</strong></p>
+    <div class="question" id="answerTwo"></div>
+   </div>
+  </section>
+
+  <section class="card" id="pingCard">
+   <h2>💗 Je pense à toi</h2>
+   <select id="pingPreset">
+    <option>Je pense à toi 💗</option>
+    <option>Tu me manques 🥺</option>
+    <option>Courage pour ta journée 💪</option>
+    <option>Je t'aime 😘</option>
+    <option>Tu me fais sourire 😊</option>
+    <option>Bonne nuit mon cœur 🌙</option>
+   </select>
+   <input id="pingCustom" maxlength="80" placeholder="Ou écris ton petit mot (80 caractères max)">
+   <button id="sendPing">Envoyer</button>
+   <p class="status" id="pingStatus">Un signal toutes les 15 minutes au maximum.</p>
+   <div class="question hidden" id="lastPing"></div>
+  </section>
+ </div>
 </div>
-</section>
 
-<section class="card hidden" id="account">
-<p class="small" id="accountEmail"></p>
-<button class="secondary" id="logout">Se déconnecter</button>
-</section>
+<!-- ===== MESSAGES ET APPELS ===== -->
+<div class="tab hidden" id="tab-messages">
+ <div class="card hidden" id="lock-messages"><h2>🔒 Messages et appels</h2><p class="small" id="lockmsg-messages"></p><button class="secondary" data-goto="together">Aller à « Ensemble »</button></div>
+ <div id="body-messages">
+  <section class="card">
+   <h2>💬 Messages et appels</h2>
+   <p class="small">Cet onglet est prêt à accueillir vos messages, messages vocaux et appels. Cette fonction n'est pas encore active : elle arrive dans la prochaine mise à jour.</p>
+  </section>
+ </div>
+</div>
+
+<!-- ===== ENSEMBLE ===== -->
+<div class="tab hidden" id="tab-together">
+ <section class="card" id="pairBox">
+  <h2>💞 Notre espace à deux</h2>
+  <p class="small">Crée votre espace ou rejoins celui de ton partenaire. En attendant, tu peux explorer tous les onglets.</p>
+  <button id="createCouple">Créer notre espace</button>
+  <p class="status">— OU —</p>
+  <input id="joinCode" placeholder="Code de votre couple" maxlength="8" autocapitalize="characters">
+  <button class="secondary" id="joinCouple">Rejoindre avec un code</button>
+  <p class="status" id="pairStatus"></p>
+ </section>
+ <section class="card hidden" id="coupleBox">
+  <h2>💌 Notre code</h2>
+  <p class="small">Code de couple à partager avec ton partenaire :</p>
+  <div class="code" id="coupleCode"></div>
+  <button class="secondary" id="copyCode">Copier le code</button>
+  <p class="small">Gardez ce code privé. Ne le publiez pas.</p>
+ </section>
+ <section class="card hidden" id="sinceBox">
+  <h2>💞 Ensemble depuis</h2>
+  <div class="streakRow"><div><div class="big" id="sinceDays">–</div><div class="small">jours ensemble</div></div></div>
+  <p class="small status" id="sinceDetail"></p>
+  <input id="sinceDate" type="date">
+  <button class="secondary" id="saveSince">Enregistrer notre date</button>
+ </section>
+ <section class="card hidden" id="statsBox">
+  <h2>📊 Nos statistiques</h2>
+  <div class="stats" id="statsGrid"></div>
+  <p class="small">Calculées depuis vos données réelles.</p>
+ </section>
+</div>
+
+<!-- ===== ÉMOTIONS ===== -->
+<div class="tab hidden" id="tab-moods">
+ <div class="card hidden" id="lock-moods"><h2>🔒 Émotions</h2><p class="small" id="lockmsg-moods"></p><button class="secondary" data-goto="together">Aller à « Ensemble »</button></div>
+ <div id="body-moods">
+  <section class="card" id="moodCard">
+   <h2>🎭 Mon humeur du jour</h2>
+   <div class="moods" id="moodGrid"></div>
+   <input id="moodNote" maxlength="140" placeholder="Un petit mot (facultatif)">
+   <button id="saveMood">Enregistrer mon humeur</button>
+   <p class="status" id="moodStatus"></p>
+   <div id="partnerMoodBox">
+    <hr>
+    <h3>Son humeur</h3>
+    <div class="question" id="partnerMood">Pas encore partagée aujourd'hui.</div>
+   </div>
+  </section>
+  <section class="card">
+   <h2>📈 Nos émotions</h2>
+   <div id="moodHistory"></div>
+  </section>
+ </div>
+</div>
+
+<!-- ===== SOUVENIRS ===== -->
+<div class="tab hidden" id="tab-memories">
+ <div class="card hidden" id="lock-memories"><h2>🔒 Souvenirs</h2><p class="small" id="lockmsg-memories"></p><button class="secondary" data-goto="together">Aller à « Ensemble »</button></div>
+ <div id="body-memories">
+  <section class="card">
+   <h2>📸 Nos souvenirs</h2>
+   <details id="memForm">
+    <summary>+ Ajouter un souvenir</summary>
+    <div class="seg" id="memKindSeg">
+     <button class="sel" data-kind="text">📝 Texte</button>
+     <button data-kind="photo">🖼️ Photo</button>
+     <button data-kind="drawing">🎨 Dessin</button>
+    </div>
+    <input id="memTitle" maxlength="100" placeholder="Titre">
+    <input id="memDate" type="date">
+    <div id="photoBlock" class="hidden">
+     <input id="memFile" type="file" accept="image/*">
+     <p class="small">La photo est réduite automatiquement pour rester légère.</p>
+    </div>
+    <div id="drawBlock" class="hidden">
+     <canvas id="drawCanvas" width="600" height="600"></canvas>
+     <div class="colors" id="penColors">
+      <i data-c="#d6609f" style="background:#d6609f" class="sel"></i>
+      <i data-c="#7b5cd6" style="background:#7b5cd6"></i>
+      <i data-c="#2b8cd6" style="background:#2b8cd6"></i>
+      <i data-c="#3aa56a" style="background:#3aa56a"></i>
+      <i data-c="#222222" style="background:#222222"></i>
+      <button class="secondary small" id="clearDraw">Effacer</button>
+     </div>
+    </div>
+    <textarea id="memText" maxlength="3000" placeholder="Raconte ce souvenir, cette anecdote..."></textarea>
+    <button id="saveMemory">Enregistrer ce souvenir</button>
+    <p class="status" id="memStatus"></p>
+   </details>
+  </section>
+  <div id="memList"></div>
+ </div>
+</div>
+
+<!-- ===== LETTRES ===== -->
+<div class="tab hidden" id="tab-letters">
+ <div class="card hidden" id="lock-letters"><h2>🔒 Lettres surprises</h2><p class="small" id="lockmsg-letters"></p><button class="secondary" data-goto="together">Aller à « Ensemble »</button></div>
+ <div id="body-letters">
+  <section class="card">
+   <h2>💌 Lettres surprises</h2>
+   <p class="small">Écris une lettre : elle restera verrouillée jusqu'à la date choisie. Même en regardant directement la base de données, il est impossible de la lire avant.</p>
+   <details id="letterForm">
+    <summary>+ Écrire une lettre</summary>
+    <input id="letterTitle" maxlength="80" placeholder="Titre (visible avant l'ouverture)">
+    <textarea id="letterText" maxlength="5000" style="min-height:160px" placeholder="Ma lettre..."></textarea>
+    <p class="small">S'ouvrira le :</p>
+    <input id="letterWhen" type="datetime-local">
+    <button id="sendLetter">Programmer la lettre</button>
+    <p class="status" id="letterStatus"></p>
+   </details>
+  </section>
+  <div id="letterList"></div>
+ </div>
+</div>
+
+<!-- ===== CALENDRIER ===== -->
+<div class="tab hidden" id="tab-calendar">
+ <div class="card hidden" id="lock-calendar"><h2>🔒 Calendrier</h2><p class="small" id="lockmsg-calendar"></p><button class="secondary" data-goto="together">Aller à « Ensemble »</button></div>
+ <div id="body-calendar">
+  <section class="card">
+   <h2>📅 Notre calendrier</h2>
+   <details id="eventForm">
+    <summary>+ Ajouter une date</summary>
+    <input id="evTitle" maxlength="100" placeholder="Titre (anniversaire, dîner, voyage...)">
+    <input id="evDate" type="date">
+    <input id="evTime" type="time">
+    <select id="evType">
+     <option value="event">📌 Événement</option>
+     <option value="anniversary">🎂 Anniversaire</option>
+     <option value="important">⭐ Date importante</option>
+    </select>
+    <label class="row"><input type="checkbox" id="evYearly">Se répète chaque année</label>
+    <button id="saveEvent">Ajouter</button>
+    <p class="status" id="evStatus"></p>
+   </details>
+  </section>
+  <div id="eventList"></div>
+ </div>
+</div>
+
+<!-- ===== PLUS ===== -->
+<div class="tab hidden" id="tab-more">
+ <section class="card" id="historyCard">
+  <h2>📖 Historique</h2>
+  <p class="small">Vos anciennes questions et réponses.</p>
+  <div id="historyList"><p class="small">Disponible quand vous serez deux.</p></div>
+ </section>
+ <section class="card">
+  <h2>👤 Mon compte</h2>
+  <p class="small" id="accountEmail"></p>
+  <p class="small">🔔 Notifications push : pas encore activées. Elles demandent une étape de configuration supplémentaire (voir le guide).</p>
+  <button class="secondary" id="logout">Se déconnecter</button>
+ </section>
+</div>
+
+</div>
 <p class="small status">Entre Nous ♡ — notre petit monde à deux.</p>
 </main>
 
-<div id="swDiagnostic">Vérification du service worker...</div>
+<nav id="nav" class="hidden">
+ <button class="sel" data-tab="today"><span>🏠</span>Accueil</button>
+ <button data-tab="messages"><span>💬</span>Messages</button>
+ <button data-tab="together"><span>💞</span>Ensemble</button>
+ <button data-tab="moods"><span>🎭</span>Émotions</button>
+ <button data-tab="memories"><span>📸</span>Souvenirs</button>
+ <button data-tab="letters"><span>💌</span>Lettres</button>
+ <button data-tab="calendar"><span>📅</span>Calendrier</button>
+ <button data-tab="more"><span>✨</span>Plus</button>
+</nav>
+<div id="toast"></div>
 
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
 
 <script>
+// ===== PURE-START (fonctions sans Firebase, testées automatiquement) =====
+function pad2(n){return String(n).padStart(2,"0");}
+function parisDate(d){
+ const parts=new Intl.DateTimeFormat("en-CA",{timeZone:"Europe/Paris",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(d||new Date());
+ const p={};parts.forEach(x=>p[x.type]=x.value);
+ return p.year+"-"+p.month+"-"+p.day;
+}
+function addDays(dateStr,n){
+ const a=dateStr.split("-").map(Number);
+ const t=new Date(Date.UTC(a[0],a[1]-1,a[2]+n));
+ return t.getUTCFullYear()+"-"+pad2(t.getUTCMonth()+1)+"-"+pad2(t.getUTCDate());
+}
+function daysBetween(a,b){
+ const x=a.split("-").map(Number),y=b.split("-").map(Number);
+ return Math.round((Date.UTC(y[0],y[1]-1,y[2])-Date.UTC(x[0],x[1]-1,x[2]))/86400000);
+}
+function computeStreaks(dates,todayStr){
+ const set=new Set(dates);
+ let cur=0,d=set.has(todayStr)?todayStr:addDays(todayStr,-1);
+ while(set.has(d)){cur++;d=addDays(d,-1);}
+ const sorted=Array.from(set).sort();
+ let best=0,run=0,prev=null;
+ for(const x of sorted){
+  run=(prev&&addDays(prev,1)===x)?run+1:1;
+  if(run>best)best=run;
+  prev=x;
+ }
+ return{current:cur,best:best};
+}
+function nextOccurrence(ev,todayStr){
+ if(!ev.yearly)return ev.date;
+ const md=ev.date.slice(5);
+ const ty=Number(todayStr.slice(0,4));
+ let cand=addDays(ty+"-"+md,0);
+ if(cand<todayStr)cand=addDays((ty+1)+"-"+md,0);
+ return cand;
+}
+function esc(s){
+ return String(s==null?"":s).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});
+}
+// ===== PURE-END =====
+
 const firebaseConfig = {
  apiKey: "AIzaSyCSZUqj2DDi-ESKwPdXsFiTgLUirr_97-k",
  authDomain: "entre-nous-cde15.firebaseapp.com",
@@ -114,27 +381,35 @@ const firebaseConfig = {
  appId: "1:533203517782:web:eeadfd94441b06266296f7",
  measurementId: "G-Y1G5EQXPDP"
 };
+// Cette configuration Firebase est publique par conception : la sécurité repose sur les règles Firestore.
 
 firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.firestore();
-let user = null;
-let couple = null;
-let pollTimer = null;
-let refreshing = false;
-let dayData = {};
+const auth=firebase.auth();
+const db=firebase.firestore();
+const TS=firebase.firestore.FieldValue.serverTimestamp;
 
-const $ = id => document.getElementById(id);
-const show = (id,on) => $(id).classList.toggle("hidden",!on);
-const message = (id,value) => $(id).textContent = value;
+let user=null,couple=null,otherUid=null;
+let pollTimer=null,refreshing=false,dayData={},daysCache=[];
+let pingUnsub=null,pingFirst=true,pingTimer=null,lastPingAt=0;
+let selMood=null,memKind="text",penColor="#d6609f";
+const marked={};
+const MOODS=[["😍","Amoureux·se"],["😊","Heureux·se"],["😌","Serein·e"],["🥱","Fatigué·e"],["😔","Triste"],["😰","Stressé·e"],["😠","Énervé·e"]];
 
-function today(){
- const parts = new Intl.DateTimeFormat("en-CA",{
-  timeZone:"Europe/Paris",year:"numeric",month:"2-digit",day:"2-digit"
- }).formatToParts(new Date());
- const p = {};
- parts.forEach(x=>p[x.type]=x.value);
- return p.year+"-"+p.month+"-"+p.day;
+const $=id=>document.getElementById(id);
+const show=(id,on)=>$(id).classList.toggle("hidden",!on);
+const message=(id,v)=>{$(id).textContent=v;};
+const today=()=>parisDate(new Date());
+const fmtDate=s=>{const a=s.split("-").map(Number);return new Date(a[0],a[1]-1,a[2]).toLocaleDateString("fr-FR",{weekday:"short",day:"numeric",month:"long",year:"numeric"});};
+const fmtDateTime=d=>d.toLocaleString("fr-FR",{day:"numeric",month:"long",year:"numeric",hour:"2-digit",minute:"2-digit"});
+
+let toastTimer=null;
+function toast(msg){
+ const t=$("toast");t.textContent=msg;t.classList.add("on");
+ clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove("on"),3800);
+}
+function errText(e){
+ if(e&&e.code==="permission-denied")return "Action refusée par la sécurité de l'application.";
+ return (e&&e.message)||String(e);
 }
 
 function makeCode(){
@@ -144,45 +419,48 @@ function makeCode(){
  return Array.from(bytes,b=>chars[b%chars.length]).join("");
 }
 
-function dayRef(){
- return db.collection("couples").doc(couple.code).collection("days").doc(today());
-}
-function questionRef(uid){return dayRef().collection("questions").doc(uid);}
-function answerRef(uid){return dayRef().collection("answers").doc(uid);}
+const C=()=>db.collection("couples").doc(couple.code);
+const dayRefOf=d=>C().collection("days").doc(d);
+const dayRef=()=>dayRefOf(today());
+const questionRef=uid=>dayRef().collection("questions").doc(uid);
+const answerRef=uid=>dayRef().collection("answers").doc(uid);
+const hasPartner=()=>!!otherUid;
 
+// ===== Connexion =====
 $("signup").onclick=async()=>{
- try{
-  message("authStatus","Création du compte...");
-  await auth.createUserWithEmailAndPassword($("email").value.trim(),$("password").value);
- }catch(e){message("authStatus",e.message);}
+ try{message("authStatus","Création du compte...");await auth.createUserWithEmailAndPassword($("email").value.trim(),$("password").value);}
+ catch(e){message("authStatus",e.message);}
 };
 $("login").onclick=async()=>{
- try{
-  message("authStatus","Connexion...");
-  await auth.signInWithEmailAndPassword($("email").value.trim(),$("password").value);
- }catch(e){message("authStatus",e.message);}
+ try{message("authStatus","Connexion...");await auth.signInWithEmailAndPassword($("email").value.trim(),$("password").value);}
+ catch(e){message("authStatus",e.message);}
+};
+$("resetPw").onclick=async()=>{
+ const em=$("email").value.trim();
+ if(!em)return message("authStatus","Écris d'abord ton adresse e-mail ci-dessus.");
+ try{await auth.sendPasswordResetEmail(em);message("authStatus","E-mail de réinitialisation envoyé (pense aux courriers indésirables).");}
+ catch(e){message("authStatus",e.message);}
 };
 $("logout").onclick=()=>auth.signOut();
 
+// ===== Couple =====
+let currentTab="together",sinceStart=null;
+
 async function createCouple(){
  const code=makeCode();
- await db.collection("couples").doc(code).set({
-  members:[user.uid],
-  createdAt:firebase.firestore.FieldValue.serverTimestamp()
- });
+ await db.collection("couples").doc(code).set({members:[user.uid],createdAt:TS()});
  localStorage.setItem("entreNousCode",code);
+ await rememberCode(code);
  await openCouple(code);
 }
 $("createCouple").onclick=async()=>{
- try{message("pairStatus","Création de votre espace...");await createCouple();}
- catch(e){message("pairStatus","Erreur : "+e.message);}
+ try{message("pairStatus","Création de votre espace...");await createCouple();message("pairStatus","");}
+ catch(e){message("pairStatus","Erreur : "+errText(e));}
 };
 
 async function joinCouple(){
  const code=$("joinCode").value.trim().toUpperCase();
- if(!/^[A-HJ-NP-Z2-9]{8}$/.test(code)){
-  message("pairStatus","Le code doit contenir 8 caractères.");return;
- }
+ if(!/^[A-HJ-NP-Z2-9]{8}$/.test(code)){message("pairStatus","Le code doit contenir 8 caractères.");return;}
  try{
   const ref=db.collection("couples").doc(code);
   await db.runTransaction(async tx=>{
@@ -194,45 +472,146 @@ async function joinCouple(){
    tx.update(ref,{members:[...members,user.uid]});
   });
   localStorage.setItem("entreNousCode",code);
+  await rememberCode(code);
   await openCouple(code);
- }catch(e){message("pairStatus",e.message);}
+  message("pairStatus","");
+ }catch(e){message("pairStatus",errText(e));}
 }
 $("joinCouple").onclick=joinCouple;
 
+async function rememberCode(code){
+ try{await db.collection("users").doc(user.uid).set({coupleCode:code});}catch(e){}
+}
+async function recoverCode(){
+ try{
+  const s=await db.collection("users").doc(user.uid).get();
+  if(s.exists&&s.data().coupleCode)return s.data().coupleCode;
+ }catch(e){}
+ return null;
+}
+
+// Sections qui demandent un couple ("couple") ou un partenaire présent ("partner")
+const TABS=["today","messages","together","moods","memories","letters","calendar","more"];
+const NEEDS={today:"couple",messages:"partner",together:null,moods:"couple",memories:"couple",letters:"partner",calendar:"couple",more:null};
+
+function renderLocks(){
+ TABS.forEach(t=>{
+  const need=NEEDS[t];
+  const ok=!need||(need==="couple"?!!couple:hasPartner());
+  const lock=document.getElementById("lock-"+t),body=document.getElementById("body-"+t);
+  if(lock)lock.classList.toggle("hidden",ok);
+  if(body)body.classList.toggle("hidden",!ok);
+  if(lock&&!ok){
+   document.getElementById("lockmsg-"+t).textContent=!couple
+    ?"Crée ou rejoins d'abord votre espace dans l'onglet « Ensemble » pour utiliser cette section. Tu peux continuer à explorer les autres onglets."
+    :"Ton/ta partenaire n'a pas encore rejoint votre espace. Cette section s'activera dès qu'il ou elle sera là.";
+  }
+ });
+}
+
+function applyCouple(data,code){
+ couple={code:code,members:data.members||[],createdAt:data.createdAt};
+ otherUid=couple.members.find(u=>u!==user.uid)||null;
+ show("waitPartner",!hasPartner());
+ show("daily",hasPartner());show("pingCard",hasPartner());show("partnerMoodBox",hasPartner());
+ show("pairBox",false);show("coupleBox",true);show("sinceBox",true);show("statsBox",hasPartner());
+ $("coupleCode").textContent=code;
+ renderLocks();
+}
+
+function clearCoupleUI(){
+ if(pollTimer){clearInterval(pollTimer);pollTimer=null;}
+ if(pingUnsub){pingUnsub();pingUnsub=null;}
+ couple=null;otherUid=null;dayData={};daysCache=[];sinceStart=null;
+ show("pairBox",true);show("coupleBox",false);show("sinceBox",false);show("statsBox",false);
+ renderLocks();
+}
+
 async function openCouple(code){
- const ref=db.collection("couples").doc(code);
- const snap=await ref.get();
+ const snap=await db.collection("couples").doc(code).get();
  if(!snap.exists||!(snap.data().members||[]).includes(user.uid)){
   localStorage.removeItem("entreNousCode");
-  show("pair",true);show("room",false);show("daily",false);return;
+  clearCoupleUI();
+  return false;
  }
- couple={code,...snap.data()};
- show("pair",false);show("room",true);show("daily",true);
- $("coupleCode").textContent=code;
- $("accountEmail").textContent="Connecté : "+user.email;
- show("account",true);
+ applyCouple(snap.data(),code);
+ rememberCode(code);
  if(pollTimer)clearInterval(pollTimer);
  await refreshDay();
- pollTimer=setInterval(refreshDay,5000);
+ pollTimer=setInterval(()=>{if(document.visibilityState==="visible")refreshDay();},6000);
+ if(hasPartner()){startPings();loadDays();backfillLegacy();}
+ switchTab(currentTab);
+ return true;
 }
 
 $("copyCode").onclick=async()=>{
- try{await navigator.clipboard.writeText(couple.code);alert("Code copié !");}
+ try{await navigator.clipboard.writeText(couple.code);toast("Code copié !");}
  catch(e){alert("Votre code : "+couple.code);}
 };
 
-function renderDay(){
+// ===== Navigation (toujours libre : aucun écran ne bloque) =====
+function switchTab(name){
+ currentTab=name;
+ document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("hidden",t.id!=="tab-"+name));
+ document.querySelectorAll("#nav button").forEach(b=>{
+  const on=b.dataset.tab===name;
+  b.classList.toggle("sel",on);
+  if(on){try{b.scrollIntoView({inline:"center",block:"nearest"});}catch(e){}}
+ });
+ window.scrollTo(0,0);
  if(!couple)return;
- const qMine=dayData.qMine,qOther=dayData.qOther;
- const aMine=dayData.aMine,aOther=dayData.aOther;
+ if(name==="memories")loadMemories();
+ if(name==="letters")loadLetters();
+ if(name==="calendar")loadEvents();
+ if(name==="together")loadTogether();
+ if(name==="moods"){refreshMoods();loadMoodHistory();}
+ if(name==="more")loadHistory();
+}
+document.querySelectorAll("#nav button").forEach(b=>b.onclick=()=>switchTab(b.dataset.tab));
+document.querySelectorAll("[data-goto]").forEach(b=>b.onclick=()=>switchTab(b.dataset.goto));
+
+// ===== Ensemble depuis (compteur de jours) =====
+async function loadTogether(){
+ if(!couple)return;
+ try{
+  const s=await C().collection("settings").doc("together").get();
+  sinceStart=s.exists?s.data().startDate:null;
+ }catch(e){}
+ renderSince();
+ if(hasPartner())loadStats();
+}
+function renderSince(){
+ if(sinceStart){
+  const n=daysBetween(sinceStart,today());
+  $("sinceDays").textContent=n>=0?n:0;
+  const nx=nextOccurrence({date:sinceStart,yearly:true},today());
+  const dn=daysBetween(today(),nx);
+  message("sinceDetail","Depuis le "+fmtDate(sinceStart)+" — prochain anniversaire "+(dn===0?"aujourd'hui 🎉":"dans "+dn+" jours"));
+  if(document.activeElement!==$("sinceDate"))$("sinceDate").value=sinceStart;
+ }else{
+  $("sinceDays").textContent="–";
+  message("sinceDetail","Choisis ci-dessous la date de votre début.");
+ }
+}
+$("saveSince").onclick=async()=>{
+ const v=$("sinceDate").value;
+ if(!v)return toast("Choisis une date.");
+ try{
+  await C().collection("settings").doc("together").set({startDate:v,updatedBy:user.uid,updatedAt:TS()});
+  sinceStart=v;renderSince();toast("Date enregistrée 💞");
+ }catch(e){toast("Erreur : "+errText(e));}
+};
+
+// ===== Question du jour (logique d'origine conservée) =====
+function renderDay(){
+ if(!couple||!hasPartner())return;
+ const qMine=dayData.qMine,qOther=dayData.qOther,aMine=dayData.aMine,aOther=dayData.aOther;
  if(document.activeElement!==$("myQuestion"))$("myQuestion").value=qMine||"";
- $("myQuestion").disabled=!!qMine;
- $("sendQuestion").disabled=!!qMine;
+ $("myQuestion").disabled=!!qMine;$("sendQuestion").disabled=!!qMine;
  message("myQuestionStatus",qMine?"Ta question est envoyée ♡":"Tu n'as pas encore envoyé ta question aujourd'hui.");
  message("partnerQuestion",qOther||"En attente de sa question...");
  if(document.activeElement!==$("myAnswer"))$("myAnswer").value=aMine||"";
- $("myAnswer").disabled=!qOther||!!aMine;
- $("sendAnswer").disabled=!qOther||!!aMine;
+ $("myAnswer").disabled=!qOther||!!aMine;$("sendAnswer").disabled=!qOther||!!aMine;
  message("myAnswerStatus",aMine?"Ta réponse est envoyée ♡":qOther?"À toi de répondre !":"La question de l'autre n'est pas encore arrivée.");
  if(aMine&&aOther){
   show("revealed",true);
@@ -244,18 +623,30 @@ function renderDay(){
  }
 }
 
+async function markDay(field){
+ const o={date:today(),updatedAt:TS()};
+ o[field]=firebase.firestore.FieldValue.arrayUnion(user.uid);
+ await dayRef().set(o,{merge:true});
+}
+
 async function refreshDay(){
  if(!couple||refreshing)return;
  refreshing=true;
  try{
-  const i=couple.members.indexOf(user.uid);
-  if(i<0)return;
-  const otherUid=couple.members[i===0?1:0];
+  if(!hasPartner()){
+   const s=await db.collection("couples").doc(couple.code).get();
+   if(s.exists&&(s.data().members||[]).length>=2){
+    applyCouple(s.data(),couple.code);
+    startPings();loadDays();backfillLegacy();
+   }
+   return;
+  }
   const [qMineSnap,qOtherSnap,aMineSnap]=await Promise.all([
    questionRef(user.uid).get(),questionRef(otherUid).get(),answerRef(user.uid).get()
   ]);
   let aOther=null;
-  try{aOther=await answerRef(otherUid).get();}catch(e){}
+  if(aMineSnap.exists){try{aOther=await answerRef(otherUid).get();}catch(e){}}
+  const prevBoth=!!(dayData.aMine&&dayData.aOther);
   dayData={
    qMine:qMineSnap.exists?qMineSnap.data().text:"",
    qOther:qOtherSnap.exists?qOtherSnap.data().text:"",
@@ -263,58 +654,460 @@ async function refreshDay(){
    aOther:aOther&&aOther.exists?aOther.data().text:""
   };
   renderDay();
- }catch(e){message("myQuestionStatus","Erreur de lecture : "+e.message);}
+  const k=today()+user.uid;
+  if((dayData.qMine||dayData.aMine)&&!marked[k]){
+   marked[k]=true;
+   try{
+    if(dayData.qMine)await markDay("askedBy");
+    if(dayData.aMine)await markDay("answeredBy");
+   }catch(e){marked[k]=false;}
+  }
+  const kb=today()+"both";
+  if(dayData.aMine&&dayData.aOther&&!marked[kb]){
+   marked[kb]=true;
+   try{await dayRef().set({date:today(),updatedAt:TS(),answeredBy:firebase.firestore.FieldValue.arrayUnion(user.uid,otherUid)},{merge:true});}
+   catch(e){marked[kb]=false;}
+  }
+  if(!prevBoth&&dayData.aMine&&dayData.aOther)loadDays();
+  refreshMoods();
+ }catch(e){message("myQuestionStatus","Erreur de lecture : "+errText(e));}
  finally{refreshing=false;}
 }
 
 $("sendQuestion").onclick=async()=>{
  const value=$("myQuestion").value.trim();
- if(!value)return alert("Écris une question avant de l'envoyer.");
+ if(!value)return toast("Écris une question avant de l'envoyer.");
  try{
   $("sendQuestion").disabled=true;
-  await questionRef(user.uid).set({text:value,createdAt:firebase.firestore.FieldValue.serverTimestamp()});
+  await questionRef(user.uid).set({text:value,createdAt:TS()});
+  await markDay("askedBy");marked[today()+user.uid]=true;
   await refreshDay();
- }catch(e){alert("Impossible d'envoyer : "+e.message);$("sendQuestion").disabled=false;}
+ }catch(e){toast("Impossible d'envoyer : "+errText(e));$("sendQuestion").disabled=false;}
 };
 $("sendAnswer").onclick=async()=>{
  const value=$("myAnswer").value.trim();
- if(!value)return alert("Écris une réponse avant de l'envoyer.");
+ if(!value)return toast("Écris une réponse avant de l'envoyer.");
  try{
   $("sendAnswer").disabled=true;
-  await answerRef(user.uid).set({text:value,createdAt:firebase.firestore.FieldValue.serverTimestamp()});
-  await refreshDay();
- }catch(e){alert("Impossible d'envoyer : "+e.message);$("sendAnswer").disabled=false;}
+  await answerRef(user.uid).set({text:value,createdAt:TS()});
+  await markDay("answeredBy");
+  await refreshDay();loadDays();
+ }catch(e){toast("Impossible d'envoyer : "+errText(e));$("sendAnswer").disabled=false;}
 };
 
+// ===== Série, jours à deux =====
+async function loadDays(){
+ if(!couple||!hasPartner())return;
+ try{
+  const snap=await C().collection("days").orderBy("date","desc").get();
+  daysCache=snap.docs.map(d=>({id:d.id,...d.data()}));
+  const both=daysCache.filter(d=>(d.answeredBy||[]).length>=2).map(d=>d.id);
+  const s=computeStreaks(both,today());
+  $("streakNow").textContent=s.current;
+  $("jointDays").textContent=both.length;
+ }catch(e){}
+}
+
+// Reprise des anciens jours (avant l'ajout du résumé quotidien). Aucune donnée n'est modifiée ni supprimée.
+async function backfillLegacy(){
+ const key="entreNousBackfill_"+couple.code+"_"+user.uid;
+ if(localStorage.getItem(key))return;
+ try{
+  const t=today();
+  const dates=[];for(let i=0;i<90;i++)dates.push(addDays(t,-i));
+  for(let i=0;i<dates.length;i+=10){
+   await Promise.all(dates.slice(i,i+10).map(async d=>{
+    const dref=dayRefOf(d);
+    const [qM,qO,aM]=await Promise.all([
+     dref.collection("questions").doc(user.uid).get(),
+     dref.collection("questions").doc(otherUid).get(),
+     dref.collection("answers").doc(user.uid).get()
+    ]);
+    if(!qM.exists&&!qO.exists&&!aM.exists)return;
+    let aOexists=false;
+    if(aM.exists){try{aOexists=(await dref.collection("answers").doc(otherUid).get()).exists;}catch(e){}}
+    const asked=[],ans=[];
+    if(qM.exists)asked.push(user.uid);if(qO.exists)asked.push(otherUid);
+    if(aM.exists)ans.push(user.uid);if(aOexists)ans.push(otherUid);
+    const o={date:d,updatedAt:TS()};
+    if(asked.length)o.askedBy=firebase.firestore.FieldValue.arrayUnion(...asked);
+    if(ans.length)o.answeredBy=firebase.firestore.FieldValue.arrayUnion(...ans);
+    await dref.set(o,{merge:true});
+   }));
+  }
+  localStorage.setItem(key,"1");
+  loadDays();
+ }catch(e){}
+}
+
+// ===== Humeur =====
+const moodRef=uid=>C().collection("moods").doc(today()+"_"+uid);
+function renderMoodGrid(){
+ $("moodGrid").innerHTML=MOODS.map(m=>'<button class="mood'+(selMood===m[0]?" sel":"")+'" data-m="'+m[0]+'">'+m[0]+'<small>'+esc(m[1])+'</small></button>').join("");
+ $("moodGrid").querySelectorAll("button").forEach(b=>b.onclick=()=>{selMood=b.dataset.m;renderMoodGrid();});
+}
+function moodLabel(e){const m=MOODS.find(x=>x[0]===e);return m?m[0]+" "+m[1]:e;}
+async function refreshMoods(){
+ try{
+  const [mine,other]=await Promise.all([moodRef(user.uid).get(),moodRef(otherUid).get()]);
+  if(mine.exists&&!selMood){selMood=mine.data().mood;if(document.activeElement!==$("moodNote"))$("moodNote").value=mine.data().note||"";renderMoodGrid();}
+  if(other.exists){
+   const d=other.data();
+   $("partnerMood").textContent=moodLabel(d.mood)+(d.note?" — "+d.note:"");
+  }else $("partnerMood").textContent="Pas encore partagée aujourd'hui.";
+ }catch(e){}
+}
+$("saveMood").onclick=async()=>{
+ if(!selMood)return toast("Choisis d'abord une humeur.");
+ try{
+  await moodRef(user.uid).set({uid:user.uid,date:today(),mood:selMood,note:$("moodNote").value.trim().slice(0,140),updatedAt:TS()});
+  message("moodStatus","Humeur enregistrée ♡");refreshMoods();loadMoodHistory();
+ }catch(e){toast("Impossible d'enregistrer : "+errText(e));}
+};
+
+async function loadMoodHistory(){
+ try{
+  const snap=await C().collection("moods").orderBy("date","desc").limit(60).get();
+  const by={};
+  snap.docs.forEach(d=>{const m=d.data();(by[m.date]=by[m.date]||{})[m.uid===user.uid?"me":"other"]=m;});
+  const dates=Object.keys(by).sort().reverse().slice(0,30);
+  const row=(label,m)=>'<div class="txt">'+esc(label)+' : '+(m?esc(moodLabel(m.mood))+(m.note?' — '+esc(m.note):''):'—')+'</div>';
+  $("moodHistory").innerHTML=dates.length
+   ?dates.map(dt=>'<div class="item"><div class="d">'+esc(fmtDate(dt))+'</div>'+row("Moi",by[dt].me)+(hasPartner()?row("Ton/ta partenaire",by[dt].other):"")+'</div>').join("")
+   :'<p class="small">Aucune humeur enregistrée pour l\'instant.</p>';
+ }catch(e){$("moodHistory").innerHTML='<p class="small">Erreur : '+esc(errText(e))+'</p>';}
+}
+
+// ===== Je pense à toi =====
+function startPings(){
+ if(pingUnsub){pingUnsub();pingUnsub=null;}
+ pingFirst=true;
+ pingUnsub=C().collection("pings").orderBy("createdAt","desc").limit(5).onSnapshot(snap=>{
+  const docs=snap.docs.map(d=>({id:d.id,...d.data()}));
+  const mine=docs.find(d=>d.to===user.uid&&d.createdAt);
+  if(mine){
+   const when=mine.createdAt.toDate();
+   $("lastPing").classList.remove("hidden");
+   $("lastPing").textContent="💗 "+mine.message+"\n"+fmtDateTime(when);
+  }
+  if(!pingFirst){
+   snap.docChanges().forEach(ch=>{
+    const d=ch.doc.data();
+    if(ch.type==="added"&&d.to===user.uid&&d.createdAt)toast("💗 "+d.message);
+   });
+  }
+  pingFirst=false;
+ },()=>{});
+ refreshPingState();
+}
+async function refreshPingState(){
+ try{
+  const s=await C().collection("pingState").doc(user.uid).get();
+  lastPingAt=s.exists&&s.data().lastAt?s.data().lastAt.toDate().getTime():0;
+ }catch(e){}
+ updatePingButton();
+ if(pingTimer)clearInterval(pingTimer);
+ pingTimer=setInterval(updatePingButton,15000);
+}
+function updatePingButton(){
+ const wait=lastPingAt+15*60000-Date.now();
+ const b=$("sendPing");
+ if(wait>0){b.disabled=true;message("pingStatus","Prochain signal possible dans "+Math.ceil(wait/60000)+" min.");}
+ else{b.disabled=false;message("pingStatus","Un signal toutes les 15 minutes au maximum.");}
+}
+$("sendPing").onclick=async()=>{
+ const msg=($("pingCustom").value.trim()||$("pingPreset").value).slice(0,80);
+ try{
+  $("sendPing").disabled=true;
+  const batch=db.batch();
+  batch.set(C().collection("pingState").doc(user.uid),{lastAt:TS()});
+  batch.set(C().collection("pings").doc(),{from:user.uid,to:otherUid,message:msg,createdAt:TS()});
+  await batch.commit();
+  $("pingCustom").value="";
+  lastPingAt=Date.now();updatePingButton();
+  toast("Envoyé 💗");
+ }catch(e){
+  toast(e&&e.code==="permission-denied"?"Trop tôt : un signal toutes les 15 minutes.":"Erreur : "+errText(e));
+  refreshPingState();
+ }
+};
+
+// ===== Souvenirs =====
+const cv=$("drawCanvas"),ctx=cv.getContext("2d");
+let drawing=false,drawn=false;
+function clearCanvas(){ctx.fillStyle="#fff8fb";ctx.fillRect(0,0,cv.width,cv.height);drawn=false;}
+clearCanvas();ctx.lineWidth=7;ctx.lineCap="round";ctx.lineJoin="round";
+function cpos(e){const r=cv.getBoundingClientRect();return{x:(e.clientX-r.left)*cv.width/r.width,y:(e.clientY-r.top)*cv.height/r.height};}
+cv.addEventListener("pointerdown",e=>{drawing=true;drawn=true;ctx.strokeStyle=penColor;ctx.beginPath();const p=cpos(e);ctx.moveTo(p.x,p.y);ctx.lineTo(p.x+.1,p.y+.1);ctx.stroke();try{cv.setPointerCapture(e.pointerId);}catch(x){}e.preventDefault();});
+cv.addEventListener("pointermove",e=>{if(!drawing)return;const p=cpos(e);ctx.lineTo(p.x,p.y);ctx.stroke();e.preventDefault();});
+["pointerup","pointercancel"].forEach(ev=>cv.addEventListener(ev,()=>{drawing=false;}));
+$("clearDraw").onclick=clearCanvas;
+$("penColors").querySelectorAll("i").forEach(i=>i.onclick=()=>{penColor=i.dataset.c;$("penColors").querySelectorAll("i").forEach(x=>x.classList.toggle("sel",x===i));});
+$("memDate").value=today();
+$("memKindSeg").querySelectorAll("button").forEach(b=>b.onclick=()=>{
+ memKind=b.dataset.kind;
+ $("memKindSeg").querySelectorAll("button").forEach(x=>x.classList.toggle("sel",x===b));
+ show("photoBlock",memKind==="photo");show("drawBlock",memKind==="drawing");
+});
+
+function fileToDataUrl(file,maxSide){
+ return new Promise((res,rej)=>{
+  const img=new Image(),url=URL.createObjectURL(file);
+  img.onload=()=>{
+   let w=img.width,h=img.height;
+   const k=Math.min(1,maxSide/Math.max(w,h));
+   w=Math.round(w*k);h=Math.round(h*k);
+   const c=document.createElement("canvas");c.width=w;c.height=h;
+   c.getContext("2d").drawImage(img,0,0,w,h);
+   URL.revokeObjectURL(url);
+   let q=.75,out=c.toDataURL("image/jpeg",q);
+   while(out.length>700000&&q>.3){q-=.1;out=c.toDataURL("image/jpeg",q);}
+   res(out);
+  };
+  img.onerror=()=>rej(new Error("Image illisible"));
+  img.src=url;
+ });
+}
+
+$("saveMemory").onclick=async()=>{
+ const title=$("memTitle").value.trim(),text=$("memText").value.trim(),date=$("memDate").value||today();
+ let data=null;
+ try{
+  if(memKind==="photo"){
+   const f=$("memFile").files[0];
+   if(!f)return toast("Choisis une photo.");
+   data=await fileToDataUrl(f,1000);
+  }else if(memKind==="drawing"){
+   if(!drawn)return toast("Fais d'abord un dessin.");
+   data=cv.toDataURL("image/jpeg",.8);
+  }else if(!title&&!text)return toast("Écris quelque chose.");
+  if(data&&data.length>740000)return toast("Image trop lourde, essaie une autre photo.");
+  $("saveMemory").disabled=true;
+  const ref=C().collection("memories").doc();
+  await ref.set({kind:memKind,title:title,text:text,date:date,by:user.uid,hasMedia:!!data,createdAt:TS()});
+  if(data)await ref.collection("media").doc("main").set({data:data});
+  $("memTitle").value="";$("memText").value="";$("memFile").value="";clearCanvas();
+  $("memForm").open=false;
+  toast("Souvenir ajouté 💗");
+  loadMemories();
+ }catch(e){toast("Erreur : "+errText(e));}
+ finally{$("saveMemory").disabled=false;}
+};
+
+let memoriesCache=[];
+async function loadMemories(){
+ try{
+  const snap=await C().collection("memories").orderBy("date","desc").get();
+  memoriesCache=snap.docs.map(d=>({id:d.id,...d.data()}));
+  const list=$("memList");
+  if(!memoriesCache.length){list.innerHTML='<div class="card"><p class="small">Aucun souvenir pour l\'instant. Ajoutez le premier ! 💗</p></div>';return;}
+  list.innerHTML=memoriesCache.map(m=>
+   '<div class="card"><div class="d small">'+esc(fmtDate(m.date))+(m.by===user.uid?"":'<span class="badge">de l\'autre</span>')+'</div>'+
+   (m.title?'<h2>'+esc(m.title)+'</h2>':'')+
+   (m.text?'<div class="txt" style="white-space:pre-wrap;line-height:1.5">'+esc(m.text)+'</div>':'')+
+   (m.hasMedia?'<img data-mid="'+esc(m.id)+'" alt="" style="width:100%;border-radius:14px;margin-top:10px;display:none">':'')+
+   (m.by===user.uid?'<button class="danger" data-del="'+esc(m.id)+'" style="margin-top:12px">Supprimer</button>':'')+
+   '</div>').join("");
+  list.querySelectorAll("img[data-mid]").forEach(async img=>{
+   try{
+    const s=await C().collection("memories").doc(img.dataset.mid).collection("media").doc("main").get();
+    if(s.exists){img.src=s.data().data;img.style.display="block";}
+   }catch(e){}
+  });
+  list.querySelectorAll("button[data-del]").forEach(b=>b.onclick=async()=>{
+   if(!confirm("Supprimer définitivement ce souvenir ?"))return;
+   try{
+    const id=b.dataset.del;
+    const m=memoriesCache.find(x=>x.id===id);
+    if(m&&m.hasMedia){try{await C().collection("memories").doc(id).collection("media").doc("main").delete();}catch(e){}}
+    await C().collection("memories").doc(id).delete();
+    loadMemories();
+   }catch(e){toast("Erreur : "+errText(e));}
+  });
+ }catch(e){$("memList").innerHTML='<div class="card"><p class="small">Erreur : '+esc(errText(e))+'</p></div>';}
+}
+
+// ===== Lettres surprises =====
+async function sendLetter(){
+ const title=$("letterTitle").value.trim(),text=$("letterText").value.trim(),when=$("letterWhen").value;
+ if(!title||!text||!when)return toast("Titre, lettre et date sont obligatoires.");
+ const at=new Date(when);
+ if(isNaN(at.getTime())||at.getTime()<Date.now()+60000)return toast("Choisis une date et une heure dans le futur.");
+ $("sendLetter").disabled=true;
+ let ref=null;
+ try{
+  ref=C().collection("letters").doc();
+  await ref.set({from:user.uid,to:otherUid,title:title,unlockAt:firebase.firestore.Timestamp.fromDate(at),createdAt:TS()});
+  await ref.collection("body").doc("content").set({text:text});
+  $("letterTitle").value="";$("letterText").value="";$("letterWhen").value="";
+  $("letterForm").open=false;
+  toast("Lettre programmée 💌");
+  loadLetters();
+ }catch(e){
+  if(ref){try{await ref.delete();}catch(x){}}
+  toast("Erreur : "+errText(e));
+ }finally{$("sendLetter").disabled=false;}
+}
+$("sendLetter").onclick=sendLetter;
+
+async function loadLetters(){
+ if(!hasPartner()){$("letterList").innerHTML='<div class="card"><p class="small">Les lettres seront disponibles quand ton/ta partenaire aura rejoint l\'espace.</p></div>';return;}
+ try{
+  const snap=await C().collection("letters").orderBy("unlockAt","desc").get();
+  const letters=snap.docs.map(d=>({id:d.id,...d.data()}));
+  const list=$("letterList");
+  if(!letters.length){list.innerHTML='<div class="card"><p class="small">Aucune lettre pour l\'instant. 💌</p></div>';return;}
+  const now=Date.now();
+  list.innerHTML=letters.map(l=>{
+   const at=l.unlockAt.toDate(),mine=l.from===user.uid,open=at.getTime()<=now;
+   const status=open?"🔓 Disponible":"🔒 Verrouillée jusqu'au "+fmtDateTime(at);
+   const lab=mine?"Lettre envoyée":"Lettre reçue";
+   return '<div class="card"><div class="d small">'+lab+'</div><h2>'+esc(l.title)+'</h2>'+
+    '<p class="small '+(open?"":"lock")+'">'+esc(status)+'</p>'+
+    (open||mine?'<button class="secondary" data-open="'+esc(l.id)+'">'+(open?"Lire la lettre":"Relire ma lettre")+'</button>':'')+
+    '<div class="question hidden" id="lt-'+esc(l.id)+'" style="margin-top:8px"></div>'+
+    (mine&&!open?'<button class="danger" data-ldel="'+esc(l.id)+'">Annuler cette lettre</button>':'')+
+    '</div>';
+  }).join("");
+  list.querySelectorAll("button[data-open]").forEach(b=>b.onclick=async()=>{
+   const box=$("lt-"+b.dataset.open);
+   try{
+    const s=await C().collection("letters").doc(b.dataset.open).collection("body").doc("content").get();
+    box.textContent=s.exists?s.data().text:"(Lettre vide)";box.classList.remove("hidden");
+   }catch(e){toast(e&&e.code==="permission-denied"?"Pas encore ! Cette lettre est toujours verrouillée.":"Erreur : "+errText(e));}
+  });
+  list.querySelectorAll("button[data-ldel]").forEach(b=>b.onclick=async()=>{
+   if(!confirm("Annuler cette lettre ? Elle sera supprimée."))return;
+   try{
+    const id=b.dataset.ldel;
+    try{await C().collection("letters").doc(id).collection("body").doc("content").delete();}catch(e){}
+    await C().collection("letters").doc(id).delete();
+    loadLetters();
+   }catch(e){toast("Erreur : "+errText(e));}
+  });
+ }catch(e){$("letterList").innerHTML='<div class="card"><p class="small">Erreur : '+esc(errText(e))+'</p></div>';}
+}
+
+// ===== Calendrier =====
+$("evType").onchange=()=>{if($("evType").value==="anniversary")$("evYearly").checked=true;};
+$("saveEvent").onclick=async()=>{
+ const title=$("evTitle").value.trim(),date=$("evDate").value,time=$("evTime").value;
+ if(!title||!date)return toast("Titre et date sont obligatoires.");
+ try{
+  const o={title:title,date:date,type:$("evType").value,yearly:$("evYearly").checked,createdBy:user.uid,createdAt:TS()};
+  if(time)o.time=time;
+  await C().collection("events").add(o);
+  $("evTitle").value="";$("evDate").value="";$("evTime").value="";$("evYearly").checked=false;
+  $("eventForm").open=false;toast("Date ajoutée 📅");loadEvents();
+ }catch(e){toast("Erreur : "+errText(e));}
+};
+const EV_ICON={event:"📌",anniversary:"🎂",important:"⭐"};
+async function loadEvents(){
+ try{
+  const snap=await C().collection("events").get();
+  const t=today();
+  const evs=snap.docs.map(d=>({id:d.id,...d.data()}));
+  evs.forEach(e=>{e._next=nextOccurrence(e,t);});
+  const upcoming=evs.filter(e=>e._next>=t).sort((a,b)=>a._next<b._next?-1:a._next>b._next?1:0);
+  const past=evs.filter(e=>e._next<t).sort((a,b)=>a._next<b._next?1:-1);
+  const card=(e,isPast)=>{
+   const diff=daysBetween(t,e._next);
+   const when=isPast?"il y a "+(-diff)+" j":diff===0?"Aujourd'hui !":diff===1?"Demain":"dans "+diff+" jours";
+   return '<div class="card"><div class="d small">'+esc(fmtDate(e._next))+(e.time?" à "+esc(e.time):"")+(e.yearly?'<span class="badge">chaque année</span>':'')+'</div>'+
+    '<h2>'+(EV_ICON[e.type]||"📌")+" "+esc(e.title)+'</h2><p class="small">'+esc(when)+'</p>'+
+    '<button class="danger" data-evdel="'+esc(e.id)+'">Supprimer</button></div>';
+  };
+  let html="";
+  if(!evs.length)html='<div class="card"><p class="small">Aucune date pour l\'instant. Ajoutez vos anniversaires et dates importantes ! 📅</p></div>';
+  if(upcoming.length)html+="<h3>À venir</h3>"+upcoming.map(e=>card(e,false)).join("");
+  if(past.length)html+='<h3>Passées</h3>'+past.map(e=>card(e,true)).join("");
+  $("eventList").innerHTML=html;
+  $("eventList").querySelectorAll("button[data-evdel]").forEach(b=>b.onclick=async()=>{
+   if(!confirm("Supprimer cette date ?"))return;
+   try{await C().collection("events").doc(b.dataset.evdel).delete();loadEvents();}catch(e){toast("Erreur : "+errText(e));}
+  });
+ }catch(e){$("eventList").innerHTML='<div class="card"><p class="small">Erreur : '+esc(errText(e))+'</p></div>';}
+}
+
+// ===== Statistiques =====
+async function loadStats(){
+ if(!hasPartner()){$("statsGrid").innerHTML='<p class="small">Les statistiques apparaîtront quand vous serez deux.</p>';return;}
+ try{
+  await loadDays();
+  const both=daysCache.filter(d=>(d.answeredBy||[]).length>=2).map(d=>d.id);
+  const s=computeStreaks(both,today());
+  const [mem,let_,ev]=await Promise.all([
+   C().collection("memories").get(),C().collection("letters").get(),C().collection("events").get()
+  ]);
+  const sent=let_.docs.filter(d=>d.data().from===user.uid).length;
+  const cells=[
+   [both.length,"jours à deux"],[s.current,"série actuelle"],[s.best,"meilleure série"],
+   [mem.size,"souvenirs"],[let_.size,"lettres ("+sent+" envoyées)"],[ev.size,"dates au calendrier"]
+  ];
+  $("statsGrid").innerHTML=cells.map(c=>'<div class="stat"><b>'+c[0]+'</b><span>'+esc(c[1])+'</span></div>').join("");
+ }catch(e){$("statsGrid").innerHTML='<p class="small">Erreur : '+esc(errText(e))+'</p>';}
+}
+
+// ===== Historique =====
+async function loadHistory(){
+ if(!hasPartner()){$("historyList").innerHTML='<p class="small">Pas encore d\'historique.</p>';return;}
+ try{
+  await loadDays();
+  const days=daysCache.slice(0,60);
+  if(!days.length){$("historyList").innerHTML='<p class="small">Pas encore d\'historique.</p>';return;}
+  $("historyList").innerHTML=days.map(d=>{
+   const both=(d.answeredBy||[]).length>=2;
+   return '<details class="item" data-day="'+esc(d.id)+'"><summary>'+(both?"💗 ":"⏳ ")+esc(fmtDate(d.id))+'</summary><div class="hbody small">Chargement...</div></details>';
+  }).join("");
+  $("historyList").querySelectorAll("details").forEach(det=>det.addEventListener("toggle",()=>{if(det.open)loadHistoryDay(det);}));
+ }catch(e){$("historyList").innerHTML='<p class="small">Erreur : '+esc(errText(e))+'</p>';}
+}
+async function loadHistoryDay(det){
+ if(det.dataset.loaded)return;
+ const d=det.dataset.day,box=det.querySelector(".hbody"),dref=dayRefOf(d);
+ try{
+  const [qM,qO,aM]=await Promise.all([
+   dref.collection("questions").doc(user.uid).get(),dref.collection("questions").doc(otherUid).get(),dref.collection("answers").doc(user.uid).get()
+  ]);
+  let aO=null;
+  if(aM.exists){try{aO=await dref.collection("answers").doc(otherUid).get();}catch(e){}}
+  const block=(label,s)=>'<p><strong>'+esc(label)+'</strong></p><div class="question">'+esc(s)+'</div>';
+  let html="";
+  html+=block("Ta question",qM.exists?qM.data().text:"(pas de question)");
+  html+=block("Sa réponse",aO&&aO.exists?aO.data().text:aM.exists?"(pas encore répondu)":"(cachée tant que tu n'as pas répondu)");
+  html+=block("Sa question",qO.exists?qO.data().text:"(pas de question)");
+  html+=block("Ta réponse",aM.exists?aM.data().text:"(pas de réponse)");
+  box.innerHTML=html;det.dataset.loaded="1";
+ }catch(e){box.textContent="Erreur : "+errText(e);}
+}
+
+// ===== Session =====
 auth.onAuthStateChanged(async current=>{
  user=current;
- show("auth",!user);show("account",!!user);show("pair",!!user);
+ show("auth",!user);
  if(!user){
-  show("room",false);show("daily",false);
-  if(pollTimer){clearInterval(pollTimer);pollTimer=null;}
-  couple=null;return;
+  show("app",false);show("nav",false);
+  if(pingTimer){clearInterval(pingTimer);pingTimer=null;}
+  clearCoupleUI();selMood=null;
+  return;
  }
+ // Connecté : on entre tout de suite dans l'application, sans attendre de partenaire.
+ show("app",true);show("nav",true);
  $("accountEmail").textContent="Connecté : "+user.email;
- const saved=localStorage.getItem("entreNousCode");
+ renderMoodGrid();
+ clearCoupleUI();
+ switchTab("together");
+ let saved=localStorage.getItem("entreNousCode");
+ if(!saved)saved=await recoverCode();
  if(saved){
-  try{await openCouple(saved);}
-  catch(e){message("pairStatus","Erreur : "+e.message);}
+  try{if(await openCouple(saved))switchTab("today");}
+  catch(e){message("pairStatus","Erreur : "+errText(e));}
  }
 });
 
-// Enregistrement et diagnostic du service worker
+// ===== Service worker (sans bandeau de diagnostic) =====
 if("serviceWorker" in navigator){
- window.addEventListener("load",async()=>{
-  try{
-   const registration=await navigator.serviceWorker.register("./sw.js");
-   await navigator.serviceWorker.ready;
-   $("swDiagnostic").textContent="Service Worker : ENREGISTRÉ ✅";
-  }catch(error){
-   $("swDiagnostic").textContent="Service Worker : ERREUR ❌ "+error.message;
-  }
- });
-}else{
- $("swDiagnostic").textContent="Service Worker non pris en charge ❌";
+ window.addEventListener("load",()=>{navigator.serviceWorker.register("./sw.js").catch(()=>{});});
 }
 </script>
 </body>
