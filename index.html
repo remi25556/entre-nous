@@ -25,9 +25,9 @@ button:disabled{opacity:.4}
 .question{background:#382d43;padding:14px;border-radius:12px;line-height:1.5;overflow-wrap:anywhere;white-space:pre-wrap}
 .status{text-align:center;color:#e8c9e5;font-size:14px}
 hr{border:0;border-top:1px solid #51415f;margin:20px 0}
+#swDiagnostic{position:fixed;bottom:10px;left:10px;right:10px;background:white;color:#111;padding:14px;z-index:99999;border-radius:10px;font-size:14px;text-align:center}
 </style>
 <link rel="manifest" href="./manifest.json">
-<meta name="theme-color" content="#171321">
 </head>
 <body>
 <main>
@@ -70,20 +70,16 @@ hr{border:0;border-top:1px solid #51415f;margin:20px 0}
 <section class="card hidden" id="daily">
 <h2>🌷 La question du jour</h2>
 <p class="small">Chacun écrit une question pour l'autre. Une seule question par jour !</p>
-
 <h3>Ta question</h3>
 <textarea id="myQuestion" maxlength="500" placeholder="Ce que j'aimerais te demander aujourd'hui..."></textarea>
 <button id="sendQuestion">Envoyer ma question</button>
 <p class="status" id="myQuestionStatus"></p>
-
 <hr>
 <h3>La question de l'autre</h3>
 <div class="question" id="partnerQuestion">En attente de sa question...</div>
-
 <textarea id="myAnswer" maxlength="1000" placeholder="Ta réponse..."></textarea>
 <button id="sendAnswer">Envoyer ma réponse</button>
 <p class="status" id="myAnswerStatus"></p>
-
 <hr>
 <h3>💗 Vos réponses</h3>
 <p class="small" id="revealStatus">Elles seront révélées quand vous aurez répondu tous les deux.</p>
@@ -99,9 +95,10 @@ hr{border:0;border-top:1px solid #51415f;margin:20px 0}
 <p class="small" id="accountEmail"></p>
 <button class="secondary" id="logout">Se déconnecter</button>
 </section>
-
 <p class="small status">Entre Nous ♡ — notre petit monde à deux.</p>
 </main>
+
+<div id="swDiagnostic">Vérification du service worker...</div>
 
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
@@ -119,10 +116,8 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
-
 const auth = firebase.auth();
 const db = firebase.firestore();
-
 let user = null;
 let couple = null;
 let pollTimer = null;
@@ -135,12 +130,8 @@ const message = (id,value) => $(id).textContent = value;
 
 function today(){
  const parts = new Intl.DateTimeFormat("en-CA",{
-  timeZone:"Europe/Paris",
-  year:"numeric",
-  month:"2-digit",
-  day:"2-digit"
+  timeZone:"Europe/Paris",year:"numeric",month:"2-digit",day:"2-digit"
  }).formatToParts(new Date());
-
  const p = {};
  parts.forEach(x=>p[x.type]=x.value);
  return p.year+"-"+p.month+"-"+p.day;
@@ -154,180 +145,99 @@ function makeCode(){
 }
 
 function dayRef(){
- return db.collection("couples").doc(couple.code)
-  .collection("days").doc(today());
+ return db.collection("couples").doc(couple.code).collection("days").doc(today());
 }
-
-function questionRef(uid){
- return dayRef().collection("questions").doc(uid);
-}
-
-function answerRef(uid){
- return dayRef().collection("answers").doc(uid);
-}
+function questionRef(uid){return dayRef().collection("questions").doc(uid);}
+function answerRef(uid){return dayRef().collection("answers").doc(uid);}
 
 $("signup").onclick=async()=>{
  try{
   message("authStatus","Création du compte...");
-  await auth.createUserWithEmailAndPassword(
-   $("email").value.trim(),
-   $("password").value
-  );
- }catch(e){
-  message("authStatus",e.message);
- }
+  await auth.createUserWithEmailAndPassword($("email").value.trim(),$("password").value);
+ }catch(e){message("authStatus",e.message);}
 };
-
 $("login").onclick=async()=>{
  try{
   message("authStatus","Connexion...");
-  await auth.signInWithEmailAndPassword(
-   $("email").value.trim(),
-   $("password").value
-  );
- }catch(e){
-  message("authStatus",e.message);
- }
+  await auth.signInWithEmailAndPassword($("email").value.trim(),$("password").value);
+ }catch(e){message("authStatus",e.message);}
 };
-
 $("logout").onclick=()=>auth.signOut();
 
 async function createCouple(){
  const code=makeCode();
-
  await db.collection("couples").doc(code).set({
   members:[user.uid],
   createdAt:firebase.firestore.FieldValue.serverTimestamp()
  });
-
  localStorage.setItem("entreNousCode",code);
  await openCouple(code);
 }
-
 $("createCouple").onclick=async()=>{
- try{
-  message("pairStatus","Création de votre espace...");
-  await createCouple();
- }catch(e){
-  message("pairStatus","Erreur : "+e.message);
- }
+ try{message("pairStatus","Création de votre espace...");await createCouple();}
+ catch(e){message("pairStatus","Erreur : "+e.message);}
 };
 
 async function joinCouple(){
  const code=$("joinCode").value.trim().toUpperCase();
-
  if(!/^[A-HJ-NP-Z2-9]{8}$/.test(code)){
-  message("pairStatus","Le code doit contenir 8 caractères.");
-  return;
+  message("pairStatus","Le code doit contenir 8 caractères.");return;
  }
-
  try{
   const ref=db.collection("couples").doc(code);
-
   await db.runTransaction(async tx=>{
    const snap=await tx.get(ref);
-
    if(!snap.exists)throw new Error("Code introuvable.");
-
    const members=snap.data().members||[];
-
    if(members.includes(user.uid))return;
    if(members.length>=2)throw new Error("Cet espace a déjà deux membres.");
-
    tx.update(ref,{members:[...members,user.uid]});
   });
-
   localStorage.setItem("entreNousCode",code);
   await openCouple(code);
- }catch(e){
-  message("pairStatus",e.message);
- }
+ }catch(e){message("pairStatus",e.message);}
 }
-
 $("joinCouple").onclick=joinCouple;
 
 async function openCouple(code){
  const ref=db.collection("couples").doc(code);
  const snap=await ref.get();
-
- if(!snap.exists || !(snap.data().members||[]).includes(user.uid)){
+ if(!snap.exists||!(snap.data().members||[]).includes(user.uid)){
   localStorage.removeItem("entreNousCode");
-  show("pair",true);
-  show("room",false);
-  show("daily",false);
-  return;
+  show("pair",true);show("room",false);show("daily",false);return;
  }
-
  couple={code,...snap.data()};
-
- show("pair",false);
- show("room",true);
- show("daily",true);
+ show("pair",false);show("room",true);show("daily",true);
  $("coupleCode").textContent=code;
  $("accountEmail").textContent="Connecté : "+user.email;
  show("account",true);
-
  if(pollTimer)clearInterval(pollTimer);
  await refreshDay();
  pollTimer=setInterval(refreshDay,5000);
 }
 
 $("copyCode").onclick=async()=>{
- try{
-  await navigator.clipboard.writeText(couple.code);
-  alert("Code copié !");
- }catch(e){
-  alert("Votre code : "+couple.code);
- }
+ try{await navigator.clipboard.writeText(couple.code);alert("Code copié !");}
+ catch(e){alert("Votre code : "+couple.code);}
 };
 
 function renderDay(){
  if(!couple)return;
-
- const i=couple.members.indexOf(user.uid);
- const otherUid=couple.members[i===0?1:0];
-
- const qMine=dayData.qMine;
- const qOther=dayData.qOther;
- const aMine=dayData.aMine;
- const aOther=dayData.aOther;
-
- if(document.activeElement!==$("myQuestion")){
-  $("myQuestion").value=qMine||"";
- }
-
+ const qMine=dayData.qMine,qOther=dayData.qOther;
+ const aMine=dayData.aMine,aOther=dayData.aOther;
+ if(document.activeElement!==$("myQuestion"))$("myQuestion").value=qMine||"";
  $("myQuestion").disabled=!!qMine;
  $("sendQuestion").disabled=!!qMine;
-
- message(
-  "myQuestionStatus",
-  qMine?"Ta question est envoyée ♡":"Tu n'as pas encore envoyé ta question aujourd'hui."
- );
-
- message(
-  "partnerQuestion",
-  qOther||"En attente de sa question..."
- );
-
- if(document.activeElement!==$("myAnswer")){
-  $("myAnswer").value=aMine||"";
- }
-
+ message("myQuestionStatus",qMine?"Ta question est envoyée ♡":"Tu n'as pas encore envoyé ta question aujourd'hui.");
+ message("partnerQuestion",qOther||"En attente de sa question...");
+ if(document.activeElement!==$("myAnswer"))$("myAnswer").value=aMine||"";
  $("myAnswer").disabled=!qOther||!!aMine;
  $("sendAnswer").disabled=!qOther||!!aMine;
-
- message(
-  "myAnswerStatus",
-  aMine?"Ta réponse est envoyée ♡":
-  qOther?"À toi de répondre !":
-  "La question de l'autre n'est pas encore arrivée."
- );
-
+ message("myAnswerStatus",aMine?"Ta réponse est envoyée ♡":qOther?"À toi de répondre !":"La question de l'autre n'est pas encore arrivée.");
  if(aMine&&aOther){
   show("revealed",true);
   message("revealStatus","Vous avez tous les deux répondu ! Voici vos réponses. 💗");
-  message("answerOne",aMine);
-  message("answerTwo",aOther);
+  message("answerOne",aMine);message("answerTwo",aOther);
  }else{
   show("revealed",false);
   message("revealStatus","Les réponses seront révélées quand vous aurez répondu tous les deux.");
@@ -337,122 +247,74 @@ function renderDay(){
 async function refreshDay(){
  if(!couple||refreshing)return;
  refreshing=true;
-
  try{
   const i=couple.members.indexOf(user.uid);
   if(i<0)return;
-
   const otherUid=couple.members[i===0?1:0];
-
   const [qMineSnap,qOtherSnap,aMineSnap]=await Promise.all([
-   questionRef(user.uid).get(),
-   questionRef(otherUid).get(),
-   answerRef(user.uid).get()
+   questionRef(user.uid).get(),questionRef(otherUid).get(),answerRef(user.uid).get()
   ]);
-
   let aOther=null;
-
-  try{
-   aOther=await answerRef(otherUid).get();
-  }catch(e){
-   // Normal : la réponse de l'autre reste protégée
-   // tant que les deux réponses ne sont pas envoyées.
-  }
-
+  try{aOther=await answerRef(otherUid).get();}catch(e){}
   dayData={
    qMine:qMineSnap.exists?qMineSnap.data().text:"",
    qOther:qOtherSnap.exists?qOtherSnap.data().text:"",
    aMine:aMineSnap.exists?aMineSnap.data().text:"",
    aOther:aOther&&aOther.exists?aOther.data().text:""
   };
-
   renderDay();
- }catch(e){
-  message("myQuestionStatus","Erreur de lecture : "+e.message);
- }finally{
-  refreshing=false;
- }
+ }catch(e){message("myQuestionStatus","Erreur de lecture : "+e.message);}
+ finally{refreshing=false;}
 }
 
 $("sendQuestion").onclick=async()=>{
  const value=$("myQuestion").value.trim();
-
  if(!value)return alert("Écris une question avant de l'envoyer.");
-
  try{
   $("sendQuestion").disabled=true;
-
-  await questionRef(user.uid).set({
-   text:value,
-   createdAt:firebase.firestore.FieldValue.serverTimestamp()
-  });
-
+  await questionRef(user.uid).set({text:value,createdAt:firebase.firestore.FieldValue.serverTimestamp()});
   await refreshDay();
- }catch(e){
-  alert("Impossible d'envoyer : "+e.message);
-  $("sendQuestion").disabled=false;
- }
+ }catch(e){alert("Impossible d'envoyer : "+e.message);$("sendQuestion").disabled=false;}
 };
-
 $("sendAnswer").onclick=async()=>{
  const value=$("myAnswer").value.trim();
-
  if(!value)return alert("Écris une réponse avant de l'envoyer.");
-
  try{
   $("sendAnswer").disabled=true;
-
-  await answerRef(user.uid).set({
-   text:value,
-   createdAt:firebase.firestore.FieldValue.serverTimestamp()
-  });
-
+  await answerRef(user.uid).set({text:value,createdAt:firebase.firestore.FieldValue.serverTimestamp()});
   await refreshDay();
- }catch(e){
-  alert("Impossible d'envoyer : "+e.message);
-  $("sendAnswer").disabled=false;
- }
+ }catch(e){alert("Impossible d'envoyer : "+e.message);$("sendAnswer").disabled=false;}
 };
 
 auth.onAuthStateChanged(async current=>{
  user=current;
-
- show("auth",!user);
- show("account",!!user);
- show("pair",!!user);
-
+ show("auth",!user);show("account",!!user);show("pair",!!user);
  if(!user){
-  show("room",false);
-  show("daily",false);
-
-  if(pollTimer){
-   clearInterval(pollTimer);
-   pollTimer=null;
-  }
-
-  couple=null;
-  return;
+  show("room",false);show("daily",false);
+  if(pollTimer){clearInterval(pollTimer);pollTimer=null;}
+  couple=null;return;
  }
-
  $("accountEmail").textContent="Connecté : "+user.email;
-
  const saved=localStorage.getItem("entreNousCode");
-
  if(saved){
-  try{
-   await openCouple(saved);
-  }catch(e){
-   message("pairStatus","Erreur : "+e.message);
-  }
+  try{await openCouple(saved);}
+  catch(e){message("pairStatus","Erreur : "+e.message);}
  }
 });
-</script>
-<script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./sw.js")
-      .catch(error => console.error("Erreur :", error));
-  });
+
+// Enregistrement et diagnostic du service worker
+if("serviceWorker" in navigator){
+ window.addEventListener("load",async()=>{
+  try{
+   const registration=await navigator.serviceWorker.register("./sw.js");
+   await navigator.serviceWorker.ready;
+   $("swDiagnostic").textContent="Service Worker : ENREGISTRÉ ✅";
+  }catch(error){
+   $("swDiagnostic").textContent="Service Worker : ERREUR ❌ "+error.message;
+  }
+ });
+}else{
+ $("swDiagnostic").textContent="Service Worker non pris en charge ❌";
 }
 </script>
 </body>
